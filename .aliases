@@ -1,0 +1,14 @@
+alias ls="lsd"
+alias ll="ls -alF"
+alias lla="ll -A"
+alias l="ls -F"
+alias la="ls -A"
+alias l1="ls -1 -F"
+
+alias bat="batcat"
+
+# Add confirmation when losing files
+alias rm="rm -i"
+alias mv="mv -i"
+
+alias fd=fdfind

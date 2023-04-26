@@ -1,0 +1,134 @@
+#!/bin/sh
+
+#####################################################################
+# FUNCTIONS
+#
+info() {
+  tput setaf 4; echo -n "$@"; tput sgr0
+}
+
+warning() {
+  tput setaf 3 bold; echo -n "$@"; tput sgr0
+  sleep 0.5
+}
+
+success() {
+  tput setaf 2; echo -n "$@"; tput sgr0
+}
+
+code() {
+  tput dim; echo -n "$@"; tput sgr0
+}
+
+install() {
+  package=$1
+  code=$2
+  if ! command -v "$package" > /dev/null 2>&1; then
+    info "Installing $package...\n"
+    eval "$code"
+  else
+    success "$package is already installed\n"
+  fi
+}
+
+#####################################################################
+# MAIN
+
+info "Updating apt...\n"
+sudo apt update \
+  && sudo apt upgrade \
+  && sudo apt dist-upgrade \
+  && sudo apt autoremove \
+  && sudo apt autoclean \
+  && sudo apt clean
+
+# PACKAGE INSTALLATION TOOLS
+# nala (https://gitlab.com/volian/nala)
+info "Installing nala"
+install nala 'sudo apt install nala -y'
+
+info "Installing deborphan"
+install deborphan 'sudo nala install deborphan -y'
+
+# SEARCH TOOLS
+# fd (fd-find) is a program to find entries in your filesystem (alternative to find)
+# https://github.com/sharkdp/fd
+info "Installing shellcheck"
+install fdfind "sudo nala install fd-find -y"
+
+# rg (ripgrep) ripgrep is a line-oriented search tool that recursively searches 
+# the current directory for a regex pattern
+# https://github.com/BurntSushi/ripgrep
+info "Installing shellcheck"
+install rg "curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+sudo dpkg -i ripgrep_13.0.0_amd64.deb"
+
+# fzf (Command Line Fuzzy Finder)
+# https://github.com/junegunn/fzf
+info "Installing shellcheck"
+install fzf "sudo nala install fzf -y"
+
+# Shellcheck - tool for spell checking of bash scripts (a.e. in vim)
+# https://github.com/koalaman/shellcheck
+info "Installing shellcheck"
+install shellcheck "sudo nala install shellcheck -y"
+
+# Midnight commander
+info "Installing Midnight Commander"
+install mc "sudo nala install mc -y"
+
+# batcat https://github.com/sharkdp/bat
+info "Installing batcat"
+install batcat 'sudo nala install batcat -y'
+
+# pdf-to-text renderer (less will be abele to show .pdf file content)
+install pdftotext 'sudo nala install poppler-utils -y'
+
+
+# RUST
+install cc 'sudo nala install build-essential -y'
+info "Updating rustup (installing if needed)...\n"
+install "rustup" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+rustup update
+
+
+
+# hipster things in shell :)
+install zsh 'sudo nala install zsh -y'
+
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+  info "Installing oh-my-zsh...\n"
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+  success "oh-my-zsh is already installed\n"
+fi
+
+zsh_completions=${ZSH_CUSTOM:-${ZSH:-$HOME/.oh-my-zsh}/custom}/plugins/zsh-completions
+if [[ ! -d $zsh_completions ]]; then
+  info "Installing zsh-completions...\n"
+  git clone https://github.com/zsh-users/zsh-completions "$zsh_completions"
+else
+  success "zsh-completions is already installed\n"
+fi
+
+zsh_autosuggestions=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+if [[ ! -d $zsh_autosuggestions ]]; then
+  info "Installing zsh-autosuggestions...\n"
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_autosuggestions"
+else
+  success "zsh-autosuggestions is already installed\n"
+fi
+
+zsh_syntax_highlighting=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+if [[ ! -d $zsh_syntax_highlighting ]]; then
+  info "Installing zsh-syntax-highlighting...\n"
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$zsh_syntax_highlighting"
+else
+  success "zsh-syntax-highlighting is already installed\n"
+fi
+
+sudo update-alternatives --config editor
+
+# Finalizing - clean after all installation
+sudo nala autoremove
+
