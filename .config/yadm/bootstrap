@@ -60,7 +60,8 @@ install fdfind "sudo nala install fd-find -y"
 # https://github.com/BurntSushi/ripgrep
 info "Installing ripgrep\n"
 install rg "curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-sudo dpkg -i ripgrep_13.0.0_amd64.deb"
+sudo dpkg -i ripgrep_13.0.0_amd64.deb
+rm ripgrep_13.0.0_amd64.deb"
 
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
@@ -124,8 +125,18 @@ else
   success "zsh-syntax-highlighting is already installed\n"
 fi
 
+zsh_fzf_tab=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+if [[ ! -d $zsh_fzf_tab ]]; then
+  info "Installing zsh-fzf-tab...\n"
+  git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+else
+  success "zsh-fzf-tab already installed"
+fi
+
 info "Installing lsd - color ls" 
 install lsd 'sudo nala install lsd -y'
+
+mv .zshrc.pre-oh-my-zsh .zshrc
 
 sudo update-alternatives --config editor
 
