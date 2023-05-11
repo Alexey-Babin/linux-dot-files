@@ -79,7 +79,7 @@ install mc "sudo nala install mc -y"
 
 # batcat https://github.com/sharkdp/bat
 info "Installing batcat"
-install batcat 'sudo nala install batcat -y'
+install batcat 'sudo nala install bat -y'
 
 # pdf-to-text renderer (less will be abele to show .pdf file content)
 install pdftotext 'sudo nala install poppler-utils -y'
@@ -91,14 +91,16 @@ info "Updating rustup (installing if needed)...\n"
 install "rustup" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 rustup update
 
-
-
 # hipster things in shell :)
 install zsh 'sudo nala install zsh -y'
 
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   info "Installing oh-my-zsh...\n"
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+
+
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 else
   success "oh-my-zsh is already installed\n"
 fi
@@ -127,8 +129,10 @@ else
   success "zsh-syntax-highlighting is already installed\n"
 fi
 
+info "Installing lsd - color ls" 
+install lsd 'sudo nala install lsd -y'
+
 sudo update-alternatives --config editor
 
 # Finalizing - clean after all installation
 sudo nala autoremove
-
