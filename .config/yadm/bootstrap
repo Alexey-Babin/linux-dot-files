@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #####################################################################
 # FUNCTIONS
@@ -53,32 +53,27 @@ install deborphan 'sudo nala install deborphan -y'
 # SEARCH TOOLS
 # fd (fd-find) is a program to find entries in your filesystem (alternative to find)
 # https://github.com/sharkdp/fd
-info "Installing shellcheck"
 install fdfind "sudo nala install fd-find -y"
 
 # rg (ripgrep) ripgrep is a line-oriented search tool that recursively searches 
 # the current directory for a regex pattern
 # https://github.com/BurntSushi/ripgrep
-info "Installing shellcheck"
+info "Installing ripgrep\n"
 install rg "curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
 sudo dpkg -i ripgrep_13.0.0_amd64.deb"
 
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
-info "Installing shellcheck"
 install fzf "sudo nala install fzf -y"
 
 # Shellcheck - tool for spell checking of bash scripts (a.e. in vim)
 # https://github.com/koalaman/shellcheck
-info "Installing shellcheck"
 install shellcheck "sudo nala install shellcheck -y"
 
 # Midnight commander
-info "Installing Midnight Commander"
 install mc "sudo nala install mc -y"
 
 # batcat https://github.com/sharkdp/bat
-info "Installing batcat"
 install batcat 'sudo nala install bat -y'
 
 # pdf-to-text renderer (less will be abele to show .pdf file content)
