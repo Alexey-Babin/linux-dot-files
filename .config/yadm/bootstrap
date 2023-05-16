@@ -59,9 +59,10 @@ install fdfind "sudo nala install fd-find -y"
 # the current directory for a regex pattern
 # https://github.com/BurntSushi/ripgrep
 info "Installing ripgrep\n"
-install rg "curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-sudo dpkg -i ripgrep_13.0.0_amd64.deb
-rm ripgrep_13.0.0_amd64.deb"
+install rg "sudo nala install ripgrep -y"
+# install rg "curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
+# sudo dpkg -i ripgrep_13.0.0_amd64.deb
+# rm ripgrep_13.0.0_amd64.deb"
 
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
