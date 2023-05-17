@@ -82,12 +82,12 @@ if ! shopt -oq posix; then
 fi
 
 source /usr/share/doc/fzf/examples/key-bindings.bash
+
+
 [ -f "$HOME/.commonrc" ] && source "$HOME/.commonrc"
 
-. "$HOME/.cargo/env"
-
 # -------------For domain accounts use zsh if it is installed --------------
-if [ -x /usr/bin/zsh -o $(whoami) =~ .*"@iibbank.com" ]; then
+if [[ -x /usr/bin/zsh ]] && [[ "$(whoami)" =~ .*"@iibbank.com" ]]; then
   echo 'starting zsh'
   exec /usr/bin/zsh
 fi
