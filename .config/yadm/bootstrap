@@ -137,6 +137,9 @@ fi
 info "Installing lsd - color ls" 
 install lsd 'sudo nala install lsd -y'
 
+info "Installing duf - color du"
+install duf 'sudo nala install duf -y'
+
 mv .zshrc.pre-oh-my-zsh .zshrc
 
 sudo update-alternatives --config editor

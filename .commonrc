@@ -55,7 +55,7 @@ if [[ -f ~/.aliases ]]; then
     . ~/.aliases
 fi
 
-export PATH=$HOME/scripts:$HOME/bin:/usr/local/bin:/usr/local/pgsql/bin:$PATH
+export PATH=$HOME/scripts:$HOME/bin:/usr/local/bin:/usr/local/pgsql/bine:$PATH
 
 source "$HOME/.cargo/env"
 
