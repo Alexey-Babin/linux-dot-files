@@ -91,3 +91,4 @@ if [[ -x /usr/bin/zsh ]] && [[ "$(whoami)" =~ .*"@iibbank.com" ]]; then
   echo 'starting zsh'
   exec /usr/bin/zsh
 fi
+. "$HOME/.cargo/env"

@@ -41,7 +41,10 @@ set history=100
 " Auto completion menu 
 set wildmenu 
 set wildmode=list:longest,full 
-set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx 
+set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+
+" Postgresql
+let g:sql_type_default = 'pgsql' 
 
 " PLUGINS -----------------------------------------------------------------{{{ 
 " Plugins code here 
@@ -62,6 +65,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'
 
     Plug 'vim-scripts/restore_view.vim'
+
+    Plug 'lifepillar/pgsql.vim'
 call plug#end() 
 
 "}}} 
