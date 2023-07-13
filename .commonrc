@@ -34,6 +34,7 @@ export LESS='-r'
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export BAT_PAGER="less -RF"
 export EDITOR='vim'
+export HISTCONTROL=ignoredups
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
