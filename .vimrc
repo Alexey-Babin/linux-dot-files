@@ -98,7 +98,7 @@ inoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <Space> zf
 
 " List symbols
-noremap <Leader><Tab><Tab> :set invlist<CR>
+nnoremap <Leader><Tab><Tab> :set invlist<CR>
 " }}} 
 
 " VIMSCRIPT ---------------------------------------------------------------{{{ 

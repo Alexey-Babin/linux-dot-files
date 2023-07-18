@@ -50,6 +50,10 @@ install nala 'sudo apt install nala -y'
 info "Installing deborphan"
 install deborphan 'sudo nala install deborphan -y'
 
+#
+info "Installing curl\n"
+install curl "sudo nala install curl -y"
+
 # SEARCH TOOLS
 # fd (fd-find) is a program to find entries in your filesystem (alternative to find)
 # https://github.com/sharkdp/fd
