@@ -13,10 +13,18 @@ set number
 set cursorline 
 set nocursorcolumn 
 
-" Indentations 
+" Indentations and tabs https://habr.com/ru/articles/64224/, http://vimcasts.org/episodes/tabs-and-spaces/
 set shiftwidth=4 
 set tabstop=4 
+set softtabstop=4
 set expandtab 
+set smarttab 
+set smartindent
+set cindent
+
+set listchars=tab:¤›,trail:·,precedes:←,extends:→,eol:↲,nbsp:␣
+
+
 
 " Backup 
 set nobackup 
@@ -89,7 +97,8 @@ vnoremap <F9> zf
 inoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <Space> zf
 
-
+" List symbols
+noremap <Leader><Tab><Tab> :set invlist<CR>
 " }}} 
 
 " VIMSCRIPT ---------------------------------------------------------------{{{ 
