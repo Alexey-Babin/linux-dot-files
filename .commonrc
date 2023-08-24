@@ -4,21 +4,21 @@ export MANPATH="/usr/local/man:$MANPATH"
 
 # Fuzzy finder configuration ()
 FD_OPTIONS="--follow --hidden --exclude .git --exclude node_modules"
-export FZF_DEFAULT_OPTS="                                           \
-    --no-mouse --height 50% -1                                      \
-	--reverse --multi --inline-info                                 \
+export FZF_DEFAULT_OPTS=" \
+    --no-mouse --height 50% -1 \
+	--reverse --multi --inline-info \
     --preview='[[ \$(file --mime {}) =~ binary ]] && echo {} is a binary file || (batcat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -100' \
 	--preview-window='right:hidden:wrap' \
 	--bind='f3:execute(batcat --style=numbers {} || less -f {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy)'"
 
-export FZF_DEFAULT_COMMAND="fddfind . $HOME"
+export FZF_DEFAULT_COMMAND="fdfind . $HOME"
 export FZF_CTRL_T_COMMAND="fdfind  $FD_OPTIONS"
 export FZF_ALT_C_COMMAND="fdfind --type d $FD_OPTIONS"
-export FZF_CTRL_R_OPTS="                                            \
-    --preview 'echo -E {}' --preview-window up:3:hidden:wrap        \
-    --bind 'ctrl-/:toggle-preview'                                  \
-    --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'    \
-    --color header:italic                                           \
+export FZF_CTRL_R_OPTS=" \
+    --preview 'echo -E {}' --preview-window up:3:hidden:wrap \
+    --bind 'ctrl-/:toggle-preview' \
+    --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' \
+    --color header:italic \
     --header 'Press Ctrl-Y to copy command into clipboard'"
 
 # Pagers: less, bat etc...
@@ -68,4 +68,5 @@ export PATH="$HOME/scripts:$HOME/bin:/usr/local/bin:/usr/local/pgsql/bin:/root/.
 # #colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-
+LESSOPEN="|/usr/local/bin/lesspipe.sh %s"
+export LESSOPEN
