@@ -48,17 +48,15 @@ plugins=(
     fzf-zsh-plugin
 )
 
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
-
 source $ZSH/oh-my-zsh.sh
 
 # zsh completions: https://github.com/zsh-users/zsh-completions
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-enable-fzf-tab
-
 
 [ -f "$HOME/.commonrc" ] && source "$HOME/.commonrc"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f "${XDG_CACHE_HOME:-$HOME/.config}/.p10k.zsh" ]] || source "${XDG_CACHE_HOME:-$HOME/.config}/.p10k.zsh"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh 
+enable-fzf-tab

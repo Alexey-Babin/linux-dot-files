@@ -81,9 +81,6 @@ if ! shopt -oq posix; then
     fi
 fi  
 
-# shellcheck source=/dev/null
-source /usr/share/doc/fzf/examples/key-bindings.bash
-
 [ -f "$HOME/.commonrc" ] && source "$HOME/.commonrc"
 
 # -------------For domain accounts use zsh if it is installed --------------
@@ -91,3 +88,5 @@ if [[ -x /usr/bin/zsh ]] && [[ "$(whoami)" =~ .*"@iibbank.com" ]]; then
     echo 'starting zsh'
     exec /usr/bin/zsh
 fi
+
+[ -f ~/.fzf.bash ] && source "$HOME/.fzf.bash"
