@@ -31,6 +31,9 @@ COMPLETION_WAITING_DOTS="%F{red}…%f"
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
+
+export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
+
 # The command execution time stamp shown in the history command output.
 # see 'man strftime' for details.
 HIST_STAMPS="yyyy-mm-dd"
@@ -42,13 +45,18 @@ plugins=(
     fzf-tab
     zsh-syntax-highlighting
     zsh-autosuggestions
+    fzf-zsh-plugin
 )
+
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
+# zsh completions: https://github.com/zsh-users/zsh-completions
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+enable-fzf-tab
+
 
 [ -f "$HOME/.commonrc" ] && source "$HOME/.commonrc"
 

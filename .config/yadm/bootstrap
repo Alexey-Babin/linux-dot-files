@@ -134,6 +134,17 @@ else
   success "zsh-fzf-tab already installed"
 fi
 
+zsh_fzf_tab=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-zsh-plugin
+if [[ ! -d $zsh_fzf_tab ]]; then
+  info "Installing fzf-zsh-plugin...\n"
+  git clone --depth 1 https://github.com/unixorn/fzf-zsh-plugin.git "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-zsh-plugin"
+else
+  success "fzf-zsh-plugin already installed"
+fi
+
+
+
+
 info "Installing lsd - color ls" 
 install lsd 'sudo nala install lsd -y'
 
@@ -146,3 +157,17 @@ sudo update-alternatives --config editor
 
 # Finalizing - clean after all installation
 sudo nala autoremove
+
+
+#
+sudo nala install exa
+sudo nala install pkg-config rar
+git clone https://github.com/wofr06/lesspipe.git
+cd lesspipe && sudo ./configure && sudo sudo make install PREFIX=/usr/local
+eval lesspipe.sh >> "$HOME/.commonrc"
+
+
+
+curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
+sudo dpkg -i du-dust_0.8.6_amd64.deb
+rm du-dust_0.8.6_amd64.deb
