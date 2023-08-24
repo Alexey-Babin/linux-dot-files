@@ -188,8 +188,4 @@ call plug#end()
     nnoremap <F9> za
     onoremap <F9> <C-C>za
     vnoremap <F9> zf
-    " Key mapping. Space for toggle fold (when folding mode Manual and cusor on fold in NORMAL).
-    " Create fold in visual mode
-    nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-    vnoremap <Space> zf
 "}}}
