@@ -78,7 +78,6 @@ let g:sql_type_default = 'pgsql'
 
 " external files
 source ~/.vim/xdg.vim
-source ~/.vim/foldings.vim
 
 " ------------------------------- PLUGINS -----------------------------------{{{
 if empty(glob("~/.vim/autoload/plug.vim"))
@@ -191,6 +190,6 @@ call plug#end()
     vnoremap <F9> zf
     " Key mapping. Space for toggle fold (when folding mode Manual and cusor on fold in NORMAL).
     " Create fold in visual mode
-    inoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+    nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
     vnoremap <Space> zf
 "}}}
