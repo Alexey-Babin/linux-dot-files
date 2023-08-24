@@ -47,10 +47,12 @@ sudo apt update \
 info "Installing nala"
 install nala 'sudo apt install nala -y'
 
-info "Installing deborphan"
+info "Installing deborphan\n"
 install deborphan 'sudo nala install deborphan -y'
 
-#
+info "Installing lanugage pack \n"
+sudo apt-get install language-pack-XX
+
 info "Installing curl\n"
 install curl "sudo nala install curl -y"
 
@@ -64,9 +66,6 @@ install fdfind "sudo nala install fd-find -y"
 # https://github.com/BurntSushi/ripgrep
 info "Installing ripgrep\n"
 install rg "sudo nala install ripgrep -y"
-# install rg "curl -LO https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-# sudo dpkg -i ripgrep_13.0.0_amd64.deb
-# rm ripgrep_13.0.0_amd64.deb"
 
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
@@ -85,7 +84,6 @@ install batcat 'sudo nala install bat -y'
 # pdf-to-text renderer (less will be abele to show .pdf file content)
 install pdftotext 'sudo nala install poppler-utils -y'
 
-
 # RUST
 install cc 'sudo nala install build-essential -y'
 info "Updating rustup (installing if needed)...\n"
@@ -99,9 +97,7 @@ if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   info "Installing oh-my-zsh...\n"
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-
-
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k
 else
   success "oh-my-zsh is already installed\n"
 fi
@@ -133,7 +129,7 @@ fi
 zsh_fzf_tab=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
 if [[ ! -d $zsh_fzf_tab ]]; then
   info "Installing zsh-fzf-tab...\n"
-  git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+  git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"/plugins/fzf-tab
 else
   success "zsh-fzf-tab already installed"
 fi
