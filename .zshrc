@@ -58,5 +58,5 @@ fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f "${XDG_CACHE_HOME:-$HOME/.config}/.p10k.zsh" ]] || source "${XDG_CACHE_HOME:-$HOME/.config}/.p10k.zsh"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 enable-fzf-tab
