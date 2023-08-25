@@ -1,9 +1,6 @@
-#!/bin/bash
-#!bin/zsh
+#!/bin/sh
 # Tune manuals
 export MANPATH="/usr/local/man:$MANPATH"
-
-s
 
 # Pagers: less, bat etc...
 # make less more friendly for non-text input files, see lesspipe(1)
