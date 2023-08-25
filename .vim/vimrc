@@ -96,6 +96,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'vim-scripts/restore_view.vim'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } 
+    Plug 'junegunn/fzf.vim'
 
     Plug 'dense-analysis/ale'
 
