@@ -40,7 +40,6 @@ HIST_STAMPS="yyyy-mm-dd"
 
 plugins=(
     git
-    fzf
     fd
     fzf-tab
     zsh-syntax-highlighting
