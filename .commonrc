@@ -7,14 +7,18 @@ FD_OPTIONS="--follow --hidden --exclude .git --exclude node_modules"
 export FZF_DEFAULT_OPTS=" \
     --height 50% --layout=reverse --border=rounded  \
 	--scroll-off=1 --info=inline --multi \
-    --preview='[[ \$(file --mime {}) =~ 'charset=binary' && ! \$(file --mime {}) =~ 'directory' ]] && file {} || (less -E {}) 2> /dev/null | head -$LINES' \
-	--preview-window='right:hidden:wrap' \
-	--bind='f3:execute(batcat --style=numbers {} || less -f {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy)' \
     --color 'fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899'"
 
 export FZF_DEFAULT_COMMAND="fdfind . $HOME"
+
 export FZF_CTRL_T_COMMAND="fdfind $FD_OPTIONS"
+export FZF_CTRL_T_OPTS=" \
+    --preview='[[ \$(file --mime {}) =~ 'charset=binary' && ! \$(file --mime {}) =~ 'directory' ]] && file {} || (less -E {}) 2> /dev/null | head -$LINES' \
+	--preview-window='right:hidden:wrap' \
+    --bind='f3:execute(batcat --style=numbers {} || less -f {}),f2:toggle-preview,ctrl-d:half-page-down,ctrl-u:half-page-up,ctrl-a:select-all+accept,ctrl-y:execute-silent(echo {+} | pbcopy)'"
+
 export FZF_ALT_C_COMMAND="fdfind --type d $FD_OPTIONS"
+
 export FZF_CTRL_R_OPTS=" \
     --preview 'echo -E {}' --preview-window up:3:hidden:wrap \
     --bind 'ctrl-/:toggle-preview' \
@@ -30,6 +34,7 @@ fi
 
 export PAGER="less"
 # export LESSOPEN="| ~/.lessfilter %s"
+export LESSOPEN="|/usr/local/bin/lesspipe.sh %s"
 export LESS='-r'
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export BAT_PAGER="less -RF"
@@ -68,7 +73,3 @@ export PATH="$HOME/scripts:$HOME/bin:/usr/local/bin:/usr/local/pgsql/bin:/root/.
 
 # #colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# export LESSOPEN="|/usr/local/bin/lesspipe.sh %s"
-export LESSOPEN='| lessfilter-fzf %s'
-

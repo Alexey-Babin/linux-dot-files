@@ -163,7 +163,7 @@ sudo nala autoremove
 sudo nala install exa
 sudo nala install pkg-config rar
 git clone https://github.com/wofr06/lesspipe.git
-cd lesspipe && sudo ./configure && sudo sudo make install PREFIX=/usr/local
+(cd lesspipe && sudo ./configure && sudo sudo make install PREFIX=/usr/local)
 eval lesspipe.sh >> "$HOME/.commonrc"
 
 
