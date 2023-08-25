@@ -1,36 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+#!bin/zsh
 # Tune manuals
 export MANPATH="/usr/local/man:$MANPATH"
 
-# Fuzzy finder configuration ()
-FD_OPTIONS="--follow --hidden --exclude .git --exclude node_modules"
-export FZF_DEFAULT_OPTS=" \
-    --height 50% --layout=reverse --border=rounded  \
-	--scroll-off=1 --info=inline --multi \
-    --prompt '∷ ' \
-    --pointer ▶ \
-    --marker ⇒ \
-    --bind='f2:toggle-preview' \
-    --bind='ctrl-d:half-page-down,ctrl-u:half-page-up' \
-    --bind='ctrl-a:select-all+accept' \
-    --bind='ctrl-y:execute-silent(echo {+} | pbcopy)' \
-    --color 'fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899'"
-
-export FZF_DEFAULT_COMMAND="fdfind . $HOME"
-
-export FZF_CTRL_T_COMMAND="fdfind $FD_OPTIONS"
-export FZF_CTRL_T_OPTS=" \
-    --preview='[[ \$(file --mime {}) =~ 'charset=binary' && ! \$(file --mime {}) =~ 'directory' ]] && file {} || (less -E {}) 2> /dev/null | head -$LINES' \
-	--preview-window='right:60%:hidden:wrap'"
-
-export FZF_ALT_C_COMMAND="fdfind --type d $FD_OPTIONS"
-
-export FZF_CTRL_R_OPTS=" \
-    --preview 'echo -E {}' --preview-window up:3:hidden:wrap \
-    --bind 'ctrl-/:toggle-preview' \
-    --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort' \
-    --color header:italic \
-    --header 'Press Ctrl-Y to copy command into clipboard'"
+s
 
 # Pagers: less, bat etc...
 # make less more friendly for non-text input files, see lesspipe(1)
@@ -50,8 +23,8 @@ export HISTCONTROL=ignoredups
 # enable color support of ls and also add handy aliases
 if test -x /usr/bin/dircolors; then
     if test -r ~/.dircolors; then
-        eval "$(dircolors -b ~/.dircolors)" 
-    else 
+        eval "$(dircolors -b ~/.dircolors)"
+    else
         eval "$(dircolors -b)"
     fi
     alias ls='ls --color=auto'
@@ -67,9 +40,14 @@ fi
 export TZ='Europe/Moscow'
 export LANG=en_US.UTF-8
 
+# shellcheck source=/dev/null
 if test -f "$HOME"/.aliases; then
-    # shellcheck source=/dev/null
     . "$HOME/.aliases"
+fi
+
+# shellcheck source=/dev/null
+if test -f "${XDG_CACHE_HOME:-$HOME/.config}/fzf.config.sh"; then
+    . "${XDG_CACHE_HOME:-$HOME/.config}/fzf.config.sh"
 fi
 
 export PATH="$HOME/scripts:$HOME/bin:/usr/local/bin:/usr/local/pgsql/bin:/root/.cargo/bin:$PATH"
