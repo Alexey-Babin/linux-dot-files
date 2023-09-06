@@ -1,6 +1,9 @@
 #!/bin/sh
 
-alias ls="lsd"
+if [ "$(command -v lsd)" ]; then
+  alias ls="lsd"
+fi
+
 alias ll="ls -AlF"
 alias lla="ll -A"
 alias l="ls -F"

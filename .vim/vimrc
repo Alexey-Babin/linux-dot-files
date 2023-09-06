@@ -3,11 +3,20 @@ set encoding=utf-8
 
 " appearance and behavior
 set termguicolors
-colorscheme lunaperche
+
+" This is only necessary if you use "set termguicolors".
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+" fixes glitch? in colors when using vim with tmux
+set t_Co=256
+
+colorscheme kolor
 set background=dark
 
 syntax enable
 filetype on             " required
+filetype plugin indent on   " Включает определение типа файла, загрузку соответствующих ему плагинов и файлов отступов
 
 set nocompatible        " Forget old vi
 set autowrite           " Automatically save before comands like :next and :make
@@ -35,7 +44,7 @@ set ignorecase          " Do case insensitive matching
 set smartcase           " Do smartcase (if mixed case, so case sensitive) matching
 set incsearch           " Incremental search
 
-" Tabs and indentations
+" ======================= Tabs and indentations ===================== {{{
 " https://habr.com/ru/articles/64224/, http://vimcasts.org/episodes/tabs-and-spaces/
 set tabstop=4           " A tab is four spaces
 set softtabstop=4       " when hitting <BS>, pretend like a tab is removed, even if spaces
@@ -50,6 +59,7 @@ set smarttab            "
 set shiftwidth=2        " Number of spaces
 " If current file type is HTML, set indentation to 2 spaces
 autocmd Filetype html setlocal tabstop=2 shiftwidth=2 expandtab
+" }}}
 
 " whitespace characters
 set nolist
@@ -64,6 +74,7 @@ set wrap
 set linebreak           " Not break words when wrapping
 set scrolloff=10        " 10 lines under/above current line
 set showbreak=…         " wrapped lines start with … character
+" set textwidth=80        " make vim break lines at 80 symbol
 " move inside wrapped line with ctrl
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -82,15 +93,18 @@ source ~/.vim/xdg.vim
 " ------------------------------- PLUGINS -----------------------------------{{{
 if empty(glob("~/.vim/autoload/plug.vim"))
     execute '!curl --create-dirs -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin('~/.vim/plugged')
+
     " NERD tree + icons
     Plug 'preservim/nerdtree'
     Plug 'ryanoasis/vim-devicons'
 
-    " A light and configurable statusline/tabline plugin for Vim
-    Plug 'itchyny/lightline.vim'
+    " A configurable statusline/tabline plugin for Vim
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
 
     " automatically restore one file's cursor position and folding information after restart vim
     Plug 'vim-scripts/restore_view.vim'
@@ -117,18 +131,13 @@ call plug#end()
     " }}}
 
     " Status line {{{ 
-    set statusline=                         " Reset statusline
-    set statusline+=\ %F\ %M\ %Y\ %R        " Left side
-    set statusline+=%=                      " Separator
-    " Right side:
-    set statusline+=\ ascii:\ %b\ hex:\ 0x%B\ row:\ %l\ col:\ %c\ percent:\%p%%
-    " Status
-    set laststatus=2
-    if !has('gui_running')
-        set t_Co=256
-    endif
+    let g:airline_powerline_fonts = 1
+    let g:airline#extensions#keymap#enabled = 0     " Не показывать текущий маппинг
+    let g:airline_section_z = "\ue0a1:%l/%L Col:%c"  " Кастомная графа положения курсора
+    let g:Powerline_symbols = 'unicode'
+    autocmd VimEnter AirlineTheme kolor
     " }}} 
-
+    
     " FZF key mappings
     nnoremap <silent> <leader>o :FZF<CR> 
 
@@ -158,12 +167,20 @@ call plug#end()
     augroup cursor_off 
         autocmd! 
         autocmd WinLeave * set nocursorline nocursorcolumn 
-        autocmd WinEnter * set cursorline cursorcolumn 
+        autocmd WinEnter * set cursorline nocursorcolumn 
     augroup OFF 
 
     " Cursor shapes for different modes
-    let &t_SI = "\e[6 q"
-    let &t_EI = "\e[2 q"
+    set ttimeoutlen=10      " пониженная задержка для escape последовательностей
+    let &t_SI.="\e[5 q"     " SI = insert mode
+    let &t_SR.="\e[3 q"     " SR = replace
+    let &t_EI.="\e[1 q"     " EI = normal
+    "1 - мигающий прямоугольник
+    "2 - обычный прямоугольник
+    "3 - мигающее подчёркивание
+    "4 - просто подчёркивание
+    "5 - мигающая вертикальная черта
+    "6 - просто вертикальная черта
 
     " reset the cursor on start (for older versions of vim, usually not required)
     augroup cursorMode

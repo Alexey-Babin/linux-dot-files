@@ -84,9 +84,17 @@ fi
 [ -f "$HOME/.commonrc" ] && source "$HOME/.commonrc"
 
 # -------------For domain accounts use zsh if it is installed --------------
-if [[ -x /usr/bin/zsh ]] && [[ "$(whoami)" =~ .*"@iibbank.com" ]]; then
-    echo 'starting zsh'
-    exec /usr/bin/zsh
-fi
+# if [[ -x /usr/bin/zsh ]] && [[ "$(whoami)" =~ .*"@iibbank.com" ]]; then
+#    echo 'starting zsh'
+#    exec /usr/bin/zsh
+# fi
 
 [ -f ~/.fzf.bash ] && source "$HOME/.fzf.bash"
+
+if [[ "$TERM" != "screen-256color" ]]; then
+  tmux_session=$(echo "$USER" | tr . -)  
+  tmux attach-session -t "$tmux_session" || tmux new-session -s "$tmux_session"
+  exit
+fi
+alias tmux="TERM=screen-256color-bce tmux"
+

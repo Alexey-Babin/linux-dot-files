@@ -84,6 +84,9 @@ install batcat 'sudo nala install bat -y'
 # pdf-to-text renderer (less will be abele to show .pdf file content)
 install pdftotext 'sudo nala install poppler-utils -y'
 
+# neofetch - beautiful systen information
+install neofetch 'sudo nala install neofetch'
+
 # RUST
 install cc 'sudo nala install build-essential -y'
 info "Updating rustup (installing if needed)...\n"
@@ -142,24 +145,7 @@ else
   success "fzf-zsh-plugin already installed"
 fi
 
-
-
-
-info "Installing lsd - color ls" 
-install lsd 'sudo nala install lsd -y'
-
-info "Installing duf - color du"
-install duf 'sudo nala install duf -y'
-
-mv .zshrc.pre-oh-my-zsh .zshrc
-
-sudo update-alternatives --config editor
-
-# Finalizing - clean after all installation
-sudo nala autoremove
-
-
-#
+# Lesspipe
 sudo nala install exa
 sudo nala install pkg-config rar
 git clone https://github.com/wofr06/lesspipe.git
@@ -167,7 +153,30 @@ git clone https://github.com/wofr06/lesspipe.git
 eval lesspipe.sh >> "$HOME/.commonrc"
 
 
+info "Installing lsd - color ls" 
+install lsd 'cargo install lsd'
+
+info "Installing duf - color du"
+install duf 'sudo nala install duf -y'
+
+mv .zshrc.pre-oh-my-zsh .zshrc
+
 
 curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
 sudo dpkg -i du-dust_0.8.6_amd64.deb
 rm du-dust_0.8.6_amd64.deb
+
+
+# Tmux and features
+install tmux 'sudo nala install tmux -y'
+install urlview 'sudo nala install urlview'
+
+git clone https://github.com/gpakosz/.tmux.git "$HOME/.oh-my-tmux"
+$ mkdir -p "~/.config/tmux"
+$ ln -s "$HOME/.oh-my-tmux/.tmux.conf" "~/.config/tmux/tmux.conf"
+
+
+# Finalizing - clean after all installation
+sudo nala autoremove
+
+sudo update-alternatives --config editor

@@ -22,14 +22,14 @@ export FZF_DEFAULT_OPTS=" \
     --bind='ctrl-a:select-all+accept' \
     --color='fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899'"
 
-export FZF_DEFAULT_COMMAND="fdfind $FD_OPTIONS \"$@\""
-export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+export FZF_DEFAULT_COMMAND="fdfind $FD_OPTIONS \"$*\""
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="\
     --prompt='All∷ '
     --bind='ctrl-d:change-prompt(Directories∷ )+reload(fdfind . --type d $FD_OPTIONS)' \
     --bind='ctrl-f:change-prompt(Files∷ )+reload(fdfind . --type f )' \
 "
-export FZF_ALT_C_COMMAND="fdfind --type d $FD_OPTIONS $@"
+export FZF_ALT_C_COMMAND="fdfind --type d $FD_OPTIONS $*"
 
 export FZF_CTRL_R_OPTS=" \
     --preview 'echo -E {}' --preview-window=up:3:hidden:wrap \
@@ -54,7 +54,7 @@ _fzf_comprun() {
         fzf --no-multi --preview 'lsd --tree {} | head -n 100' "$@"
         ;;
     export | unset)
-        fzf --preview 'eval echo \${}' "$@"
+        fzf --preview "eval echo \${}" "$@"
         ;;
     ssh)
         fzf --preview 'dig {}' "$@"

@@ -47,7 +47,7 @@ if test -f "${XDG_CACHE_HOME:-$HOME/.config}/fzf.config.sh"; then
     . "${XDG_CACHE_HOME:-$HOME/.config}/fzf.config.sh"
 fi
 
-export PATH="$HOME/scripts:$HOME/bin:/usr/local/bin:/usr/local/pgsql/bin:/root/.cargo/bin:$PATH"
+export PATH="$HOME/scripts:$HOME/bin:$HOME/.local/bin:/usr/local/bin:/usr/local/pgsql/bin:/root/.cargo/bin:$PATH"
 
 # shellcheck source=/dev/null
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
