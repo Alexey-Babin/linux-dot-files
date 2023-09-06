@@ -31,8 +31,13 @@ set showmode            " Show vim mode
 
 " Auto completion menu
 set wildmenu
-set wildmode=list:longest,full
+set wildmode=longest:full,full
+" set wildmode=list:longest,full
 set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+set wildignore+=.git,*.DS_Store
+if exists ("&wildignorecase")
+  set wildignorecase
+endif
 
 " Line number
 set number              " Line numbers
@@ -44,7 +49,7 @@ set ignorecase          " Do case insensitive matching
 set smartcase           " Do smartcase (if mixed case, so case sensitive) matching
 set incsearch           " Incremental search
 
-" ======================= Tabs and indentations ===================== {{{
+" ----- Tabs and indentations ----- {{{
 " https://habr.com/ru/articles/64224/, http://vimcasts.org/episodes/tabs-and-spaces/
 set tabstop=4           " A tab is four spaces
 set softtabstop=4       " when hitting <BS>, pretend like a tab is removed, even if spaces
@@ -61,23 +66,36 @@ set shiftwidth=2        " Number of spaces
 autocmd Filetype html setlocal tabstop=2 shiftwidth=2 expandtab
 " }}}
 
-" whitespace characters
+" ----- list (whitespace characters) ----- {{{
 set nolist
+if has("multi_byte")
+  set listchars=tab:¤›,trail:·,precedes:←,extends:→,eol:↲,nbsp:␣,space:·
+else
 " compatible space characters
-" set listchars=eol:$,tab:.\ ,trail:.,extends:>,precedes:<,nbsp:_
-" incomatible with debian stretch
-set listchars=tab:¤›,trail:·,precedes:←,extends:→,eol:↲,nbsp:␣,space:·
+  set listchars=eol:$,tab:.\ ,trail:.,extends:>,precedes:<,nbsp:_
+endif
+if has("autocmd")
+  augroup list
+    autocmd!
+    autocmd InsertEnter * let g:restorelist=&list | :set nolist
+    autocmd InsertLeave * let &list=g:restorelist
+  augroup END
+endif
+" }}}
 
-
-" soft wrap
+" ----- soft wrap ----- {{{
 set wrap
 set linebreak           " Not break words when wrapping
 set scrolloff=10        " 10 lines under/above current line
-set showbreak=…         " wrapped lines start with … character
-" set textwidth=80        " make vim break lines at 80 symbol
+if has("multi_byte")
+  set showbreak=…         " wrapped lines start with … character
+else
+  set showbreak=>
+endif
 " move inside wrapped line with ctrl
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+" }}}
 
 "  keyboard switching
 set keymap=russian-jcukenwin
@@ -90,7 +108,7 @@ let g:sql_type_default = 'pgsql'
 " external files
 source ~/.vim/xdg.vim
 
-" ------------------------------- PLUGINS -----------------------------------{{{
+" ----- PLUGINS ----- {{{
 if empty(glob("~/.vim/autoload/plug.vim"))
     execute '!curl --create-dirs -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
@@ -121,7 +139,7 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 " }}}
 
-" ------------------------------ Plugins settings ----------------------------{{{
+" ----- Plugins settings ----- {{{
     " Nerd tree {{{
     nnoremap <C-n> :NERDTree<CR> 
     nnoremap <C-t> :NERDTreeToggle<CR> 
@@ -149,20 +167,65 @@ call plug#end()
 
 " }}}
 
-" ------------------------------- MAPPINGS -----------------------------------{{{
+" ----- MAPPINGS ----- {{{
     let g:mapleader = " "           " map lader to Space
     let g:maplocalleader = ","      " map local leader to Comma
+
+    " reload configuration
+    nnoremap <silent> <leader>r :source .vim/vimrc<CR> :echo "Config reloaded"<CR>
+    
     " ---- F-keys -------
+    
     " no indent to paste (toggle Paste mode)
     set pastetoggle=<F2>
     nnoremap <F2> : set invpaste paste?<CR>
+    
     " display whitespace (list) characters with F3
     nnoremap <F3> :set list! list?<CR>
-    " toggle line numbers (for system buffer, a.e.)
-    nnoremap <F4> :set rnu! \| set nu!<CR>
+    " sudo then write
+    cabbrev w!! w !sudo tee % >/dev/null
+    
+    " window navigation
+    nnoremap <C-h> <C-w>h
+    nnoremap <C-j> <C-w>j
+    nnoremap <C-k> <C-w>k
+    nnoremap <C-l> <C-w>l
+
+    " window resizing
+    map <S-Left> <C-w><
+    map <S-Down> <C-w>-
+    map <S-Up> <C-w>+
+    map <S-Right> <C-w>>
+
+    " <leader>q quits the current window
+    nnoremap <silent> <leader>q :q<CR>
+    inoremap <silent> <leader>q <ESC>:q<CR>
+
+    " create a new tab
+    nnoremap <silent> <leader>t :tabnew<CR>
+    
 " }}}
 
-" --------------- Cursor settings -------------------------- {{{
+" ----- Toggle Line Numbers (cycles between relative/absolute/none) ----- {{{
+function! RelativeNumbersToggle()
+  if (&number == 1 && &relativenumber == 1)
+    set nonumber
+    set relativenumber relativenumber?
+  elseif (&number == 0 && &relativenumber == 1)
+    set norelativenumber
+    set number number?
+  elseif (&number == 1 && &relativenumber == 0)
+    set norelativenumber
+    set nonumber nonumber?
+  else
+    set number
+    set relativenumber relativenumber?
+  endif
+endfunc
+nnoremap <F4> :call RelativeNumbersToggle()<CR>
+" }}}
+
+" ----- Cursor settings ----- {{{
 " Display cursorline and cursorcolumn ONLY in active window 
     augroup cursor_off 
         autocmd! 
@@ -207,3 +270,4 @@ call plug#end()
     onoremap <F9> <C-C>za
     vnoremap <F9> zf
 "}}}
+
