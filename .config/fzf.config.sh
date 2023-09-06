@@ -5,7 +5,7 @@ FD_OPTIONS="--follow --hidden --exclude .git --exclude node_modules"
 FZF_FILE_PREVIEW=" \
    ([[ -d {} ]] && (lsd --tree --icon=auto --depth=3 {})) \
 || ([[ -f {} ]] && \
-    ([[ \$(file --mime {}) =~ binary ]] && (echo {} is a binary file) || (less -E {} || cat {})) \
+    ([[ \$(file --mime {}) =~ binary ]] && (echo {} is a binary file) || (batcat --color=always --plain {} || cat {})) \
 ) \
 || echo {} 2> /dev/null \
 | head -n $LINES"
