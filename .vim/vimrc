@@ -130,6 +130,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } 
     Plug 'junegunn/fzf.vim'
 
+    " Work with gpg-encoded files
+    Plug 'jamessan/vim-gnupg'
+
     Plug 'dense-analysis/ale'
 
     Plug 'lifepillar/pgsql.vim'
@@ -164,6 +167,10 @@ call plug#end()
     " for plugin restore_view.vim
     set viewoptions=cursor,folds,slash,unix
     " }}}
+
+    " GPG encoded content
+    let g:GPGPreferArmor=1
+    let g:GPGDefaultRecepients=["GnuPG ID here"]
 
 " }}}
 
