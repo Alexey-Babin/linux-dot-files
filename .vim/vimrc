@@ -179,7 +179,7 @@ call plug#end()
     let g:maplocalleader = ","      " map local leader to Comma
 
     " reload configuration
-    nnoremap <silent> <leader>r :source .vim/vimrc<CR> :echo "Config reloaded"<CR>
+    nnoremap <silent> <leader>r :source ~/.vim/vimrc<CR> :echo "Config reloaded"<CR>
     
     " ---- F-keys -------
     
@@ -212,6 +212,42 @@ call plug#end()
     
     " write as sudo
     cmap w!! w !sudo tee > /dev/null %
+
+    " Fix Ctrl + Arrows {{{
+    " https://unix.stackexchange.com/questions/1709/how-to-fix-ctrl-arrows-in-vim
+    " Just a temporary shorthand
+    function! NoRemapNXIC(lhs, rhs_nxi, rhs_c = v:null)
+      execute "nnoremap " .. a:lhs .. " " .. a:rhs_nxi
+      execute "xnoremap " .. a:lhs .. " " .. a:rhs_nxi
+      execute "inoremap " .. a:lhs .. " <C-O>" .. a:rhs_nxi
+      if a:rhs_c isnot v:null
+        execute "cnoremap " .. a:lhs .. " " .. a:rhs_c
+      endif
+    endfunction
+
+    call NoRemapNXIC("<C-Left>",  "b")
+    call NoRemapNXIC("<C-Right>", "e")
+    call NoRemapNXIC("<S-Left>",  "B")
+    call NoRemapNXIC("<S-Right>", "E")
+
+    " Handle <Ctrl> + <Arrow> escape sequences
+    call NoRemapNXIC("<ESC>[1;5A", "gk", "<Nop>")
+    call NoRemapNXIC("<ESC>[1;5B", "gj", "<Nop>")
+    call NoRemapNXIC("<ESC>[1;5D", "b",  "<C-Left>")
+    call NoRemapNXIC("<ESC>[1;5C", "e",  "<C-Right>")
+
+    " Handle <Shift> + <Arrow> escape sequences
+    call NoRemapNXIC("<ESC>[1;2A", "<PageUp>",   "<Nop>")
+    call NoRemapNXIC("<ESC>[1;2B", "<PageDown>", "<Nop>")
+    call NoRemapNXIC("<ESC>[1;2D", "B",          "<S-Left>")
+    call NoRemapNXIC("<ESC>[1;2C", "E",          "<S-Right>")
+
+    " Handle <Ctrl> + <Shift> + <Arrow> escape sequences
+    call NoRemapNXIC("<ESC>[1;6D", "ge", "<C-Left>")
+    call NoRemapNXIC("<ESC>[1;6C", "w",  "<C-Right>")
+
+    delfunction NoRemapNXIC
+    "}}}
 " }}}
 
 " ----- Toggle Line Numbers (cycles between relative/absolute/none) ----- {{{
@@ -278,4 +314,3 @@ nnoremap <F4> :call RelativeNumbersToggle()<CR>
     onoremap <F9> <C-C>za
     vnoremap <F9> zf
 "}}}
-
