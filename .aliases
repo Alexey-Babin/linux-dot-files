@@ -10,7 +10,7 @@ alias l="ls -F"
 alias la="ls -A"
 alias l1="ls -1 -F"
 
-alias bat="batcat"
+# alias bat="batcat"
 
 # Add confirmation when losing files
 alias rm="rm -i"

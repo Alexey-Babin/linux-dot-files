@@ -109,7 +109,7 @@ let g:sql_type_default = 'pgsql'
 source ~/.vim/xdg.vim
 
 " ----- PLUGINS ----- {{{
-if empty(glob("~/.vim/autoload/plug.vim"))
+if len(glob("$HOME")) && empty(glob("$HOME/.vim/autoload/plug.vim"))
     execute '!curl --create-dirs -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
@@ -314,3 +314,5 @@ nnoremap <F4> :call RelativeNumbersToggle()<CR>
     onoremap <F9> <C-C>za
     vnoremap <F9> zf
 "}}}
+
+runtime ftplugin/man.vim
