@@ -59,3 +59,5 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # work with GPG encoded content
 GPG_TTY="$TTY"
 export GPG_TTY
+LESSOPEN="|/usr/local/bin/lesspipe.sh %s"
+export LESSOPEN

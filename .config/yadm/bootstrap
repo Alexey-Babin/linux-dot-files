@@ -42,6 +42,9 @@ sudo apt update \
   && sudo apt autoclean \
   && sudo apt clean
 
+# Folder structure
+mkdir -p ~/bin
+
 # PACKAGE INSTALLATION TOOLS
 # nala (https://gitlab.com/volian/nala)
 info "Installing nala"
