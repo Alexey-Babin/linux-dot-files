@@ -72,7 +72,12 @@ instprog rg "sudo nala install ripgrep -y"
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
 info "Installing fzf"
-instprog fzf "git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install"
+if ! command -v fzf > /dev/null 2>&1 ; then
+  git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
+  "$HOME/.fzf/install"
+else
+  success "fzf is already installed"
+fi
 
 # Shellcheck - tool for spell checking of bash scripts (a.e. in vim)
 # https://github.com/koalaman/shellcheck
@@ -139,16 +144,16 @@ else
   success "zsh-syntax-highlighting is already installed"
 fi
 
-zsh_fzf_tab=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
+zsh_fzf_tab=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab
 if [[ ! -d $zsh_fzf_tab ]]; then
   info "Installing zsh-fzf-tab..."
-  git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"/plugins/fzf-tab
+  git clone https://github.com/Aloxaf/fzf-tab "$zsh_fzf_tab"
 else
   success "zsh-fzf-tab already installed"
 fi
 
 # Lesspipe - less can read archives, directories, pdfs and images
-if ! command -v lesspipe ; then
+if ! command -v lesspipe > /dev/null 2>&1 ; then
   info "Lesspipe - less can read archives, directories, pdfs and images"
   sudo nala install exa pkg-config rar -y
   git clone https://github.com/wofr06/lesspipe.git "$HOME/programs/lesspipe"
@@ -164,7 +169,7 @@ instprog chafa "sudo nala install chafa -y"
 
 # lf - light file manager
 info "Installing lf - light file manager r31"
-if ! command -v lf ; then
+if ! command -v lf > /dev/null 2>&1 ; then
   curl --location --remote-header-name https://github.com/gokcehan/lf/releases/download/r31/lf-linux-amd64.tar.gz \
     | tar --extract --gunzip --directory="$HOME/bin"
   git clone https://github.com/gokcehan/lf.git "$HOME/programs/lf"
@@ -180,7 +185,7 @@ info "Installing duf - color du"
 instprog duf "sudo nala install duf -y"
 
 info "Installing dust - beautiful tree showing disk occupied"
-if ! command -v dust ; then
+if ! command -v dust > /dev/null 2>&1 ; then
   curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
   sudo dpkg -i du-dust_0.8.6_amd64.deb
   rm du-dust_0.8.6_amd64.deb
@@ -194,17 +199,18 @@ instprog urlview "sudo nala install urlview -y"
 # Tmux and features
 info "Installing tmux and options"
 instprog tmux "sudo nala install tmux -y"
-
-if [[ -d "$HOME/programs/.oh-my-tmux" ]] ; then
-  git clone https://github.com/gpakosz/.tmux.git "$HOME/programs/.oh-my-tmux"
+oh_my_tmux_dir="$HOME/programs/.oh-my-tmux"
+if [[ ! -d "$oh_my_tmux_dir" ]] ; then
+  git clone https://github.com/gpakosz/.tmux.git "$oh_my_tmux_dir"
   mkdir -p "$HOME/.config/tmux"
-  ln -s "$HOME/programs/.oh-my-tmux/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
+  ln -s "$oh_my_tmux_dir/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
 else
   success "oh-my-tmux is already installed"
 fi
 
 # Finalizing - clean after all installation
 sudo nala autoremove
-mv .zshrc.pre-oh-my-zsh .zshrc
+
+[[ -f .zshrc.pre-oh-my-zsh ]] && mv .zshrc.pre-oh-my-zsh .zshrc
 
 sudo update-alternatives --config editor
