@@ -4,37 +4,39 @@
 # FUNCTIONS
 #
 info() {
-  tput setaf 4; echo -n "$@"; tput sgr0
+  tput setaf 4; printf "%s\n" "$@"; tput sgr0
 }
 
 warning() {
-  tput setaf 3 bold; echo -n "$@"; tput sgr0
+  tput setaf 3 bold; printf "%s\n" "$@"; tput sgr0
   sleep 0.5
 }
 
 success() {
-  tput setaf 2; echo -n "$@"; tput sgr0
+  tput setaf 2; printf "%s\n" "$@"; tput sgr0
 }
 
 code() {
-  tput dim; echo -n "$@"; tput sgr0
+  tput dim; printf "%s\n" "$@"; tput sgr0
 }
 
 instprog() {
   package=$1
   code=$2
   if ! command -v "$package" > /dev/null 2>&1; then
-    info "Installing $package...\n"
+    info "Installing $package..."
     eval "$code"
   else
-    success "$package is already installed\n"
+    success "$package is already installed"
   fi
 }
 
 #####################################################################
 # MAIN
+mkdir -p "$HOME/bin"
+mkdir -p "$HOME/programs"
 
-info "Updating apt...\n"
+info "Updating apt..."
 sudo apt update \
   && sudo apt upgrade \
   && sudo apt dist-upgrade \
@@ -42,21 +44,18 @@ sudo apt update \
   && sudo apt autoclean \
   && sudo apt clean
 
-# Folder structure
-mkdir -p ~/bin
-
 # PACKAGE INSTALLATION TOOLS
 # nala (https://gitlab.com/volian/nala)
 info "Installing nala"
 instprog nala 'sudo apt install nala -y'
 
-info "Installing deborphan\n"
+info "Installing deborphan"
 instprog deborphan 'sudo nala install deborphan -y'
 
-info "Installing lanugage pack \n"
+info "Installing lanugage pack"
 sudo apt-get install language-pack-XX
 
-info "Installing curl\n"
+info "Installing curl"
 instprog curl "sudo nala install curl -y"
 
 # SEARCH TOOLS
@@ -67,122 +66,145 @@ instprog fdfind "sudo nala install fd-find -y"
 # rg (ripgrep) ripgrep is a line-oriented search tool that recursively searches 
 # the current directory for a regex pattern
 # https://github.com/BurntSushi/ripgrep
-info "Installing ripgrep\n"
+info "Installing ripgrep"
 instprog rg "sudo nala install ripgrep -y"
 
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
+info "Installing fzf"
 instprog fzf "git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install"
 
 # Shellcheck - tool for spell checking of bash scripts (a.e. in vim)
 # https://github.com/koalaman/shellcheck
+info "Installing shellcheck"
 instprog shellcheck "sudo nala install shellcheck -y"
 
 # Midnight commander
+info "Installing Midnight Commander"
 instprog mc "sudo nala install mc -y"
 
 # batcat https://github.com/sharkdp/bat
+info "Installing Bat(cat)"
 instprog batcat 'sudo nala install bat -y'
 
 # pdf-to-text renderer (less will be abele to show .pdf file content)
+info "Installing pdf-to-text"
 instprog pdftotext 'sudo nala install poppler-utils -y'
 
 # neofetch - beautiful systen information
-instprog neofetch 'sudo nala install neofetch'
+info "Installing Neofetch"
+instprog neofetch 'sudo nala install neofetch -y'
 
 # RUST
+info "AND NOW RUST"
 instprog cc 'sudo nala install build-essential -y'
-info "Updating rustup (installing if needed)...\n"
+info "Updating rustup (installing if needed)..."
 instprog "rustup" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 rustup update
 
 # hipster things in shell :)
+info "ZSH"
 instprog zsh 'sudo nala install zsh -y'
 
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-  info "Installing oh-my-zsh...\n"
+  info "Installing oh-my-zsh..."
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/themes/powerlevel10k
 else
-  success "oh-my-zsh is already installed\n"
+  success "oh-my-zsh is already installed"
 fi
 
 zsh_completions=${ZSH_CUSTOM:-${ZSH:-$HOME/.oh-my-zsh}/custom}/plugins/zsh-completions
 if [[ ! -d $zsh_completions ]]; then
-  info "Installing zsh-completions...\n"
+  info "Installing zsh-completions..."
   git clone https://github.com/zsh-users/zsh-completions "$zsh_completions"
 else
-  success "zsh-completions is already installed\n"
+  success "zsh-completions is already installed"
 fi
 
 zsh_autosuggestions=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 if [[ ! -d $zsh_autosuggestions ]]; then
-  info "Installing zsh-autosuggestions...\n"
+  info "Installing zsh-autosuggestions..."
   git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_autosuggestions"
 else
-  success "zsh-autosuggestions is already installed\n"
+  success "zsh-autosuggestions is already installed"
 fi
 
 zsh_syntax_highlighting=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 if [[ ! -d $zsh_syntax_highlighting ]]; then
-  info "Installing zsh-syntax-highlighting...\n"
+  info "Installing zsh-syntax-highlighting..."
   git clone https://github.com/zsh-users/zsh-syntax-highlighting "$zsh_syntax_highlighting"
 else
-  success "zsh-syntax-highlighting is already installed\n"
+  success "zsh-syntax-highlighting is already installed"
 fi
 
 zsh_fzf_tab=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab
 if [[ ! -d $zsh_fzf_tab ]]; then
-  info "Installing zsh-fzf-tab...\n"
+  info "Installing zsh-fzf-tab..."
   git clone https://github.com/Aloxaf/fzf-tab "${ZSH_CUSTOM:-~/.oh-my-zsh/custom}"/plugins/fzf-tab
 else
   success "zsh-fzf-tab already installed"
 fi
 
 # Lesspipe - less can read archives, directories, pdfs and images
-sudo nala install exa
-sudo nala install pkg-config rar
-git clone https://github.com/wofr06/lesspipe.git "$HOME/programs/lesspipe"
-(cd "$HOME/programs/lesspipe" && sudo ./configure && sudo sudo make install PREFIX=/usr/local)
-eval lesspipe.sh >> "$HOME/.commonrc"
+if ! command -v lesspipe ; then
+  info "Lesspipe - less can read archives, directories, pdfs and images"
+  sudo nala install exa pkg-config rar -y
+  git clone https://github.com/wofr06/lesspipe.git "$HOME/programs/lesspipe"
+  (cd "$HOME/programs/lesspipe" && sudo ./configure && sudo sudo make install PREFIX=/usr/local)
+  # eval lesspipe.sh >> "$HOME/.commonrc"
+else
+  success "Lesspipe already installed"
+fi
 
 # chafa - image viewer for terminal
-instprog chafa 'sudo nala install chafa'
+info "chafa - image viewer for terminal"
+instprog chafa "sudo nala install chafa -y"
 
 # lf - light file manager
-curl --location --remote-header-name https://github.com/gokcehan/lf/releases/download/r30/lf-linux-amd64.tar.gz \
-  | tar --extract --gunzip --directory="$HOME/bin"
-git clone https://github.com/gokcehan/lf.git "$HOME/programs/lf"
-install -D "$HOME/programs/lf/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 644
-  
-
-
-
+info "Installing lf - light file manager r31"
+if ! command -v lf ; then
+  curl --location --remote-header-name https://github.com/gokcehan/lf/releases/download/r31/lf-linux-amd64.tar.gz \
+    | tar --extract --gunzip --directory="$HOME/bin"
+  git clone https://github.com/gokcehan/lf.git "$HOME/programs/lf"
+  install -D "$HOME/programs/lf/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 644
+else
+  success "lf is already installed"
+fi
 
 info "Installing lsd - color ls" 
-instprog lsd 'cargo install lsd'
+instprog lsd "cargo install lsd"
 
 info "Installing duf - color du"
-instprog duf 'sudo nala install duf -y'
+instprog duf "sudo nala install duf -y"
 
-mv .zshrc.pre-oh-my-zsh .zshrc
+info "Installing dust - beautiful tree showing disk occupied"
+if ! command -v dust ; then
+  curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
+  sudo dpkg -i du-dust_0.8.6_amd64.deb
+  rm du-dust_0.8.6_amd64.deb
+else
+  success "Dust is already installed"
+fi
 
-
-curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
-sudo dpkg -i du-dust_0.8.6_amd64.deb
-rm du-dust_0.8.6_amd64.deb
-
+info "Installing urlview"
+instprog urlview "sudo nala install urlview -y"
 
 # Tmux and features
-instprog tmux 'sudo nala install tmux -y'
-instprog urlview 'sudo nala install urlview'
+info "Installing tmux and options"
+instprog tmux "sudo nala install tmux -y"
 
-git clone https://github.com/gpakosz/.tmux.git "$HOME/programs/.oh-my-tmux"
-mkdir -p "$HOME/.config/tmux"
-ln -s "$HOME/programs/.oh-my-tmux/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
+if [[ -d "$HOME/programs/.oh-my-tmux" ]] ; then
+  git clone https://github.com/gpakosz/.tmux.git "$HOME/programs/.oh-my-tmux"
+  mkdir -p "$HOME/.config/tmux"
+  ln -s "$HOME/programs/.oh-my-tmux/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
+else
+  success "oh-my-tmux is already installed"
+fi
 
 # Finalizing - clean after all installation
 sudo nala autoremove
+mv .zshrc.pre-oh-my-zsh .zshrc
 
 sudo update-alternatives --config editor

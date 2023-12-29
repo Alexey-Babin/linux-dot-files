@@ -22,7 +22,7 @@ set nocompatible        " Forget old vi
 set autowrite           " Automatically save before comands like :next and :make
 set hidden              " Hide buffers when they are abandonned
 set history=100
-set mouse=a             " Enable mouse usage (all modes)
+set mouse-=a            " disable mouse usage (all modes)
 set cursorline          " highlight current cursor line
 set nocursorcolumn      " not highlight current cursor column
 set showcmd             " Show (partial) command
