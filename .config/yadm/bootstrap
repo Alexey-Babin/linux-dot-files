@@ -36,38 +36,42 @@ instprog() {
 mkdir -p "$HOME/bin"
 mkdir -p "$HOME/programs"
 
+if [ "$(whoami)" != "root" ]; then
+  SUDO=sudo
+fi
+
 info "Updating apt..."
-sudo apt update \
-  && sudo apt upgrade \
-  && sudo apt dist-upgrade \
-  && sudo apt autoremove \
-  && sudo apt autoclean \
-  && sudo apt clean
+"$SUDO" apt update \
+  && "$SUDO" apt upgrade \
+  && "$SUDO" apt dist-upgrade \
+  && "$SUDO" apt autoremove \
+  && "$SUDO" apt autoclean \
+  && "$SUDO" apt clean
 
 # PACKAGE INSTALLATION TOOLS
 # nala (https://gitlab.com/volian/nala)
 info "Installing nala"
-instprog nala 'sudo apt install nala -y'
+instprog nala "$SUDO apt install nala -y"
 
 info "Installing deborphan"
-instprog deborphan 'sudo nala install deborphan -y'
+instprog deborphan "$SUDO nala install deborphan -y"
 
 info "Installing lanugage pack"
-sudo apt-get install language-pack-XX
+$SUDO apt-get install language-pack-XX
 
 info "Installing curl"
-instprog curl "sudo nala install curl -y"
+instprog curl "$SUDO nala install curl -y"
 
 # SEARCH TOOLS
 # fd (fd-find) is a program to find entries in your filesystem (alternative to find)
 # https://github.com/sharkdp/fd
-instprog fdfind "sudo nala install fd-find -y"
+instprog fdfind "$SUDO nala install fd-find -y"
 
 # rg (ripgrep) ripgrep is a line-oriented search tool that recursively searches 
 # the current directory for a regex pattern
 # https://github.com/BurntSushi/ripgrep
 info "Installing ripgrep"
-instprog rg "sudo nala install ripgrep -y"
+instprog rg "$SUDO nala install ripgrep -y"
 
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
@@ -82,34 +86,35 @@ fi
 # Shellcheck - tool for spell checking of bash scripts (a.e. in vim)
 # https://github.com/koalaman/shellcheck
 info "Installing shellcheck"
-instprog shellcheck "sudo nala install shellcheck -y"
+instprog shellcheck "$SUDO nala install shellcheck -y"
 
 # Midnight commander
 info "Installing Midnight Commander"
-instprog mc "sudo nala install mc -y"
+instprog mc "$SUDO nala install mc -y"
+
 
 # batcat https://github.com/sharkdp/bat
 info "Installing Bat(cat)"
-instprog batcat 'sudo nala install bat -y'
+instprog batcat "$SUDO nala install bat -y"
 
 # pdf-to-text renderer (less will be abele to show .pdf file content)
 info "Installing pdf-to-text"
-instprog pdftotext 'sudo nala install poppler-utils -y'
+instprog pdftotext "$SUDO nala install poppler-utils -y"
 
 # neofetch - beautiful systen information
 info "Installing Neofetch"
-instprog neofetch 'sudo nala install neofetch -y'
+instprog neofetch "$SUDO nala install neofetch -y"
 
 # RUST
 info "AND NOW RUST"
-instprog cc 'sudo nala install build-essential -y'
+instprog cc "$SUDO nala install build-essential -y"
 info "Updating rustup (installing if needed)..."
 instprog "rustup" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 rustup update
 
 # hipster things in shell :)
 info "ZSH"
-instprog zsh 'sudo nala install zsh -y'
+instprog zsh "$SUDO nala install zsh -y"
 
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   info "Installing oh-my-zsh..."
@@ -161,17 +166,16 @@ fi
 # Lesspipe - less can read archives, directories, pdfs and images
 if ! command -v lesspipe > /dev/null 2>&1 ; then
   info "Lesspipe - less can read archives, directories, pdfs and images"
-  sudo nala install exa pkg-config rar -y
+  "$SUDO" nala install exa pkg-config rar -y
   git clone https://github.com/wofr06/lesspipe.git "$HOME/programs/lesspipe"
-  (cd "$HOME/programs/lesspipe" && sudo ./configure && sudo sudo make install PREFIX=/usr/local)
-  # eval lesspipe.sh >> "$HOME/.commonrc"
+  (cd "$HOME/programs/lesspipe" && "$SUDO" ./configure && "$SUDO" make install PREFIX=/usr/local)
 else
   success "Lesspipe already installed"
 fi
 
 # chafa - image viewer for terminal
 info "chafa - image viewer for terminal"
-instprog chafa "sudo nala install chafa -y"
+instprog chafa "$SUDO nala install chafa -y"
 
 # lf - light file manager
 info "Installing lf - light file manager r31"
@@ -188,23 +192,23 @@ info "Installing lsd - color ls"
 instprog lsd "cargo install lsd"
 
 info "Installing duf - color du"
-instprog duf "sudo nala install duf -y"
+instprog duf "$SUDO nala install duf -y"
 
 info "Installing dust - beautiful tree showing disk occupied"
 if ! command -v dust > /dev/null 2>&1 ; then
   curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
-  sudo dpkg -i du-dust_0.8.6_amd64.deb
+  "$SUDO" dpkg -i du-dust_0.8.6_amd64.deb
   rm du-dust_0.8.6_amd64.deb
 else
   success "Dust is already installed"
 fi
 
 info "Installing urlview"
-instprog urlview "sudo nala install urlview -y"
+instprog urlview "$SUDO nala install urlview -y"
 
 # Tmux and features
 info "Installing tmux and options"
-instprog tmux "sudo nala install tmux -y"
+instprog tmux "$SUDO nala install tmux -y"
 oh_my_tmux_dir="$HOME/programs/.oh-my-tmux"
 if [[ ! -d "$oh_my_tmux_dir" ]] ; then
   git clone https://github.com/gpakosz/.tmux.git "$oh_my_tmux_dir"
@@ -215,8 +219,8 @@ else
 fi
 
 # Finalizing - clean after all installation
-sudo nala autoremove
+"$SUDO" nala autoremove
 
 [[ -f .zshrc.pre-oh-my-zsh ]] && mv .zshrc.pre-oh-my-zsh .zshrc
 
-sudo update-alternatives --config editor
+"$SUDO" update-alternatives --config editor
