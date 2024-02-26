@@ -4,6 +4,14 @@ set previewer ~/.config/lf/pv.sh
 # interpreter for shell commands
 set shell zsh
 
+set promptfmt "
+\033[38;2;35;38;39;48;2;202;31;31m
+\033[38;2;202;31;31;48;2;40;47;62m
+\033[38;2;255;255;255m %w
+\033[38;2;40;47;62;48;2;58;67;89m
+\033[38;2;255;255;255m %f
+\033[;38;2;58;67;89;49m\033[m"
+
 # set '-eu' options for shell commands
 # These options are used to have safer shell commands. Option '-e' is used to
 # exit on error and option '-u' is used to give error for unset variables.
@@ -26,20 +34,22 @@ set scrolloff 10
 # Use the `dim` attribute instead of underline for the cursor in the preview pane
 set cursorpreviewfmt "\033[7;2m"
 
-# use enter for shell commands
-map <enter> shell
 
-# show the result of execution of previous commands
-map ` !true
+set incsearch
+set incfilter
+set ratios 2:3:4
 
-# execute current file (must be executable)
-map x $$f
-map X !$f
+set truncatechar "…"
+set waitmsg "\033[1;31m⏎\033[m"
 
-# dedicated keys for file opener actions
-map o &mimeopen $f
-map O $mimeopen --ask $f
+set timefmt "2006-01-02 15:04:05 "
+set infotimefmtnew '01.02 15:04'
+set infotimefmtold '01.02.06'
+set errorfmt "\033[1;31m"
+set numberfmt "\033[38;2;75;87;116m"
 
+
+# =========================== COMMANDS ================================================
 # define a custom 'open' command
 # This command is called when current file is not a directory. You may want to
 # use either file extensions and/or mime types here. Below uses an editor for
@@ -52,44 +62,43 @@ cmd open &{{
 }}
 
 # mkdir command. See wiki if you want it to select created dir
-map a :push %mkdir<space>
+cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
 
 # define a custom 'rename' command without prompt for overwrite
 cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
-map r push :rename<space>
-
-# make sure trash folder exists
-# %mkdir -p ~/.trash
 
 # move current file or selected files to trash folder
-# (also see 'man mv' for backup/overwrite options)
+%mkdir -p ~/.trash
 cmd trash %set -f; mv $fx ~/.trash
 
-# define a custom 'delete' command
 # cmd delete ${{
-#     set -f
-#     printf "$fx\n"
-#     printf "delete?[y/n]"
-#     read ans
-#     [ "$ans" = "y" ] && rm -rf $fx
-# }}
+#  clear; tput cup $(($(tput lines)/3)); tput bold
+#  set -f
+#  printf -- "%s\n" $fx | sed 's|'"$HOME"'||'
+#  printf "\033[1;33mDelete? \033[37m[\033[32my\033[37m/\033[31mn\033[37m]\033[m "
+#  read -r REPLY
+#  case "$REPLY" in
+#    [yY]) rm -rf -- $fx ;;
+#  esac
+#}}
 
-# use '<delete>' key for either 'trash' or 'delete' command
-# map <delete> trash
-# map <delete> delete
+cmd chmodx ${{
+  chmod u+x $fx
+  lf -remote "send $id reload"
+}}
 
 # extract the current file with the right command
-# (xkcd link: https://xkcd.com/1168/)
 cmd extract ${{
     set -f
-    case $f in
-        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
-        *.tar.gz|*.tgz) tar xzvf $f;;
-        *.tar.xz|*.txz) tar xJvf $f;;
-        *.zip) unzip $f;;
-        *.rar) unrar x $f;;
-        *.7z) 7z x $f;;
-    esac
+    aunpack $fx
+#    case $f in
+#        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
+#        *.tar.gz|*.tgz) tar xzvf $f;;
+#        *.tar.xz|*.txz) tar xJvf $f;;
+#        *.zip) unzip $f;;
+#        *.rar) unrar x $f;;
+#        *.7z) 7z x $f;;
+#    esac
 }}
 
 # compress current file or selected files with tar and gunzip
@@ -109,3 +118,25 @@ cmd zip ${{
     zip -r $1.zip $1
     rm -rf $1
 }}
+
+# =========================== MAPPINGS ================================================
+map <delete> delete
+
+# use enter for shell commands
+map <enter> shell
+
+ show the result of execution of previous commands
+map ` !true
+
+# execute current file (must be executable)
+map x $$f
+map X !$f
+
+# dedicated keys for file opener actions
+map o &mimeopen $f
+map O $mimeopen --ask $f
+
+# map a :push %mkdir<space>
+map r push :rename<space>
+
+map C printf "aaa"
