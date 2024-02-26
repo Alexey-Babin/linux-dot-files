@@ -92,6 +92,9 @@ instprog shellcheck "$SUDO nala install shellcheck -y"
 info "Installing Midnight Commander"
 instprog mc "$SUDO nala install mc -y"
 
+# atool - archiving tool https://emunix.org/post/atool/
+info installing atool
+instprog atool "$SUDO nala install atool -y"
 
 # batcat https://github.com/sharkdp/bat
 info "Installing Bat(cat)"
