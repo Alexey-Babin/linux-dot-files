@@ -57,7 +57,7 @@ info "Installing deborphan"
 instprog deborphan "$SUDO nala install deborphan -y"
 
 info "Installing lanugage pack"
-$SUDO apt-get install language-pack-XX
+$SUDO apt-get install language-pack-ru
 
 info "Installing curl"
 instprog curl "$SUDO nala install curl -y"
