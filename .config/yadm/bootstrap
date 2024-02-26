@@ -195,13 +195,14 @@ info "Installing duf - color du"
 instprog duf "$SUDO nala install duf -y"
 
 info "Installing dust - beautiful tree showing disk occupied"
-if ! command -v dust > /dev/null 2>&1 ; then
-  curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
-  "$SUDO" dpkg -i du-dust_0.8.6_amd64.deb
-  rm du-dust_0.8.6_amd64.deb
-else
-  success "Dust is already installed"
-fi
+instprog dust "cargo install du-dust"
+#if ! command -v dust > /dev/null 2>&1 ; then
+#  curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
+#  "$SUDO" dpkg -i du-dust_0.8.6_amd64.deb
+#  rm du-dust_0.8.6_amd64.deb
+#else
+#  success "Dust is already installed"
+#fi
 
 info "Installing urlview"
 instprog urlview "$SUDO nala install urlview -y"
