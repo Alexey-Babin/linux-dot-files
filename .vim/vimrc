@@ -117,7 +117,7 @@ endif
 call plug#begin('~/.vim/plugged')
 
     " NERD tree + icons
-    Plug 'preservim/nerdtree'
+    Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' } 
     Plug 'ryanoasis/vim-devicons'
 
     " A configurable statusline/tabline plugin for Vim
@@ -136,9 +136,15 @@ call plug#begin('~/.vim/plugged')
     Plug 'dense-analysis/ale'
 
     Plug 'lifepillar/pgsql.vim'
+
+    " A simple, easy-to-use Vim alignment plugin.
+    Plug 'junegunn/vim-easy-align'
+    "
     " hotkey helper - TODO: разобраться с ним
     " Plug 'liuchengxu/vim-which-key'
 
+    " NERD Commenter (leader + cc; leader + cu)
+    Plug 'preservim/nerdcommenter'
 call plug#end()
 " }}}
 
@@ -148,7 +154,10 @@ call plug#end()
     nnoremap <C-t> :NERDTreeToggle<CR> 
     " for Vim open with no file 
     autocmd StdinReadPre * let s:std_in=1 
-    autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif 
+    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+      \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif |
+      \ AirlineTheme kolor
+    autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
     " }}}
 
     " Status line {{{ 
@@ -156,7 +165,7 @@ call plug#end()
     let g:airline#extensions#keymap#enabled = 0     " Не показывать текущий маппинг
     let g:airline_section_z = "\ue0a1:%l/%L Col:%c"  " Кастомная графа положения курсора
     let g:Powerline_symbols = 'unicode'
-    autocmd VimEnter AirlineTheme kolor
+    " autocmd VimEnter AirlineTheme kolor
     " }}} 
     
     " FZF key mappings
@@ -171,6 +180,13 @@ call plug#end()
     " GPG encoded content
     let g:GPGPreferArmor=1
     let g:GPGDefaultRecepients=["GnuPG ID here"]
+
+    " EasyAlign: start interactive EasyAlign in Visual mode (vipga)
+    xmap ga <Plug>(EasyAlign)
+    " EasyAlign: start interactive EasyAlign for a motion/text object (gaip)
+    nmap ga <Plug>(EasyAlign)
+
+    let g:NERDCreateDefaultMappings = 1
 
 " }}}
 
