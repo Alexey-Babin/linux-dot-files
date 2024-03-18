@@ -108,91 +108,12 @@ let g:sql_type_default = 'pgsql'
 " external files
 source ~/.vim/xdg.vim
 
-" ----- PLUGINS ----- {{{
-if len(glob("$HOME")) && empty(glob("$HOME/.vim/autoload/plug.vim"))
-    execute '!curl --create-dirs -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-call plug#begin('~/.vim/plugged')
-
-    " NERD tree + icons
-    Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' } 
-    Plug 'ryanoasis/vim-devicons'
-
-    " A configurable statusline/tabline plugin for Vim
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
-
-    " automatically restore one file's cursor position and folding information after restart vim
-    Plug 'vim-scripts/restore_view.vim'
-
-    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } 
-    Plug 'junegunn/fzf.vim'
-
-    " Work with gpg-encoded files
-    Plug 'jamessan/vim-gnupg'
-
-    Plug 'dense-analysis/ale'
-
-    Plug 'lifepillar/pgsql.vim'
-
-    " A simple, easy-to-use Vim alignment plugin.
-    Plug 'junegunn/vim-easy-align'
-    "
-    " hotkey helper - TODO: разобраться с ним
-    " Plug 'liuchengxu/vim-which-key'
-
-    " NERD Commenter (leader + cc; leader + cu)
-    Plug 'preservim/nerdcommenter'
-call plug#end()
-" }}}
-
-" ----- Plugins settings ----- {{{
-    " Nerd tree {{{
-    nnoremap <C-n> :NERDTree<CR> 
-    nnoremap <C-t> :NERDTreeToggle<CR> 
-    " for Vim open with no file 
-    autocmd StdinReadPre * let s:std_in=1 
-    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-      \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif |
-      \ AirlineTheme kolor
-    autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-    " }}}
-
-    " Status line {{{ 
-    let g:airline_powerline_fonts = 1
-    let g:airline#extensions#keymap#enabled = 0     " Не показывать текущий маппинг
-    let g:airline_section_z = "\ue0a1:%l/%L Col:%c"  " Кастомная графа положения курсора
-    let g:Powerline_symbols = 'unicode'
-    " autocmd VimEnter AirlineTheme kolor
-    " }}} 
-    
-    " FZF key mappings
-    nnoremap <silent> <leader>o :FZF<CR> 
-
-    " Remember position of last edit and return on reopen {{{
-    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif 
-    " for plugin restore_view.vim
-    set viewoptions=cursor,folds,slash,unix
-    " }}}
-
-    " GPG encoded content
-    let g:GPGPreferArmor=1
-    let g:GPGDefaultRecepients=["GnuPG ID here"]
-
-    " EasyAlign: start interactive EasyAlign in Visual mode (vipga)
-    xmap ga <Plug>(EasyAlign)
-    " EasyAlign: start interactive EasyAlign for a motion/text object (gaip)
-    nmap ga <Plug>(EasyAlign)
-
-    let g:NERDCreateDefaultMappings = 1
-
-" }}}
-
 " ----- MAPPINGS ----- {{{
-    let g:mapleader = " "           " map lader to Space
+    nnoremap <SPACE> <Nop>
+    let g:mapleader=" "           " map lader to Space
+    let mapleader=" "
     let g:maplocalleader = ","      " map local leader to Comma
+
 
     " reload configuration
     nnoremap <silent> <leader>r :source ~/.vim/vimrc<CR> :echo "Config reloaded"<CR>
@@ -201,7 +122,7 @@ call plug#end()
     
     " no indent to paste (toggle Paste mode)
     set pastetoggle=<F2>
-    nnoremap <F2> : set invpaste paste?<CR>
+    nnoremap <F2> :set invpaste paste?<CR>
     
     " display whitespace (list) characters with F3
     nnoremap <F3> :set list! list?<CR>
@@ -264,6 +185,156 @@ call plug#end()
 
     delfunction NoRemapNXIC
     "}}}
+" }}}
+
+
+" ----- PLUGINS ----- {{{
+if len(glob("$HOME")) && empty(glob("$HOME/.vim/autoload/plug.vim"))
+    execute '!curl --create-dirs -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+
+    " NERD tree + icons
+    Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' } 
+    Plug 'ryanoasis/vim-devicons'
+
+    " A configurable statusline/tabline plugin for Vim
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+
+    " automatically restore one file's cursor position and folding information after restart vim
+    Plug 'vim-scripts/restore_view.vim'
+
+    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } 
+    Plug 'junegunn/fzf.vim'
+
+    " Work with gpg-encoded files
+    Plug 'jamessan/vim-gnupg'
+
+    Plug 'dense-analysis/ale'
+
+    Plug 'lifepillar/pgsql.vim'
+
+    " A simple, easy-to-use Vim alignment plugin.
+    Plug 'junegunn/vim-easy-align'
+    
+    " hotkey helper - TODO: разобраться с ним
+    Plug 'liuchengxu/vim-which-key'
+
+    " NERD Commenter (leader + cc; leader + cu)
+    Plug 'preservim/nerdcommenter'
+call plug#end()
+" }}}
+
+" ----- Plugins settings ----- {{{
+    " Nerd tree {{{
+    nnoremap <C-n> :NERDTree<CR> 
+    nnoremap <C-t> :NERDTreeToggle<CR> 
+    " for Vim open with no file 
+    autocmd StdinReadPre * let s:std_in=1 
+    autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+      \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif |
+      \ AirlineTheme kolor
+    autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+    " }}}
+
+    " Status line {{{ 
+    let g:airline_powerline_fonts = 1
+    let g:airline#extensions#keymap#enabled = 0     " Не показывать текущий маппинг
+    let g:airline_section_z = "\ue0a1:%l/%L Col:%c"  " Кастомная графа положения курсора
+    let g:Powerline_symbols = 'unicode'
+    autocmd VimEnter AirlineTheme kolor
+    " }}} 
+    
+    " FZF key mappings
+    nnoremap <silent> <leader>o :FZF<CR> 
+    nmap <leader><tab> <plug>(fzf-maps-n)
+    xmap <leader><tab> <plug>(fzf-maps-x)
+    omap <leader><tab> <plug>(fzf-maps-o)
+
+    imap <c-x><c-k> <plug>(fzf-complete-word)
+    imap <c-x><c-f> <plug>(fzf-complete-path)
+    imap <c-x><c-l> <plug>(fzf-complete-line)
+
+    nmap <leader>ff :Files<CR>
+    nmap <leader>fg :GFiles<CR>
+    nmap <leader>fb :Buffers<CR>
+    nmap <leader>fc :Rg<CR> 
+    nmap <leader>fk :Maps<CR>
+
+    " Remember position of last edit and return on reopen {{{
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif 
+    " for plugin restore_view.vim
+    set viewoptions=cursor,folds,slash,unix
+    " }}}
+
+    " GPG encoded content
+    let g:GPGPreferArmor=1
+    let g:GPGDefaultRecepients=["GnuPG ID here"]
+
+    " EasyAlign: start interactive EasyAlign in Visual mode (vipga)
+    xmap ga <Plug>(EasyAlign)
+    " EasyAlign: start interactive EasyAlign for a motion/text object (gaip)
+    nmap ga <Plug>(EasyAlign)
+
+    let g:NERDCreateDefaultMappings = 1
+
+    " whichkey
+    set timeoutlen=500
+    let g:which_key_map = {}
+    let g:which_key_map['w'] = {
+          \ 'name': '+windows',
+             \ 'w': ['<C-W>w',     'other-window'],
+             \ 'd': ['<C-W>c',     'delete-window'],
+             \ '-': ['<C-W>s',     'split-window-below'],
+             \ '|': ['<C-W>v',     'split-window-right'],
+             \ '2': ['<C-W>h',     'layout-double-columns'],
+             \ 'h': ['<C-W>h',     'window-left'],
+             \ 'l': ['<C-W>l',     'window-right'],
+             \ 'k': ['<C-W>k',     'window-up'],
+             \ 'j': ['<C-W>j',     'window-bellow'],
+             \ 'H': ['<C-W>5<',    'expand-window-left'],
+             \ 'J': [':resize +5', 'expand-window-below'],
+             \ 'L': ['<C-W>5>',    'expand-window-right'],
+             \ 'K': [':resize -5', 'expand-window-up'],
+             \ '=': ['<C-W>=',     'balance-window'],
+             \ 's': ['<C-W>s',     'split-window-below'],
+             \ 'v': ['<C-W>v',     'split-window-right'],
+             \ '?': ['Windows',    'fzf-window'],
+          \ }
+    let g:which_key_map.b = {
+      \ 'name' : '+buffer' ,
+      \ '1' : ['b1'        , 'buffer 1']        ,
+      \ '2' : ['b2'        , 'buffer 2']        ,
+      \ 'd' : ['bd'        , 'delete-buffer']   ,
+      \ 'f' : ['bfirst'    , 'first-buffer']    ,
+      \ 'h' : ['Startify'  , 'home-buffer']     ,
+      \ 'l' : ['blast'     , 'last-buffer']     ,
+      \ 'n' : ['bnext'     , 'next-buffer']     ,
+      \ 'p' : ['bprevious' , 'previous-buffer'] ,
+      \ '?' : ['Buffers'   , 'fzf-buffer']      ,
+      \ }
+
+    let g:which_key_map.K = 'which_key_ignore'
+    let g:which_key_map.c = { 'name' : '+comment' }
+    let g:which_key_map_visual = {}
+    let g:which_key_map.f = { 'name' : '+fzf' }
+    let g:which_key_map.f.f = 'FZF Files'
+    let g:which_key_map.f.g = 'FZF Git Files'
+    let g:which_key_map.f.b = 'FZF buffers'
+    let g:which_key_map.f.c = 'FZF lines'
+    let g:which_key_map.f.k = 'FZF keymaps'
+    let g:which_key_map.r = 'Reload config'
+    let g:which_key_map.t = 'New tab'
+
+    nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
+    vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
+
+    call which_key#register('<Space>', "g:which_key_map", "n")
+    call which_key#register('<Space>', "g:which_key_map_visual", "v")
+    
 " }}}
 
 " ----- Toggle Line Numbers (cycles between relative/absolute/none) ----- {{{
