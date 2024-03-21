@@ -2,7 +2,7 @@
 # Tune manuals
 export MANPATH="/usr/local/man:$MANPATH"
 
-export PATH="$HOME/scripts:$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:/usr/local/pgsql/bin:/root/.cargo/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:$PATH"
 
 # Pagers: less, bat etc...
 # make less more friendly for non-text input files, see lesspipe(1)
