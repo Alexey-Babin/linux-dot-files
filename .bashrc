@@ -91,10 +91,10 @@ fi
 
 [ -f ~/.fzf.bash ] && source "$HOME/.fzf.bash"
 
-if [[ "$TERM" != "screen-256color" ]]; then
-  tmux_session=$(echo "$USER" | tr . -)  
-  tmux attach-session -t "$tmux_session" || tmux new-session -s "$tmux_session"
-  exit
-fi
-alias tmux="TERM=screen-256color-bce tmux"
+#if [[ "$TERM" != "screen-256color" ]]; then
+  #tmux_session=$(echo "$USER" | tr . -)  
+  #tmux attach-session -t "$tmux_session" || tmux new-session -s "$tmux_session"
+  #exit
+#fi
+#alias tmux="TERM=screen-256color-bce tmux"
 

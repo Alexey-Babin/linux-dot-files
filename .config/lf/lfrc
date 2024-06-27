@@ -40,7 +40,7 @@ set incfilter
 set ratios 2:3:4
 
 set truncatechar "…"
-set waitmsg "\033[1;31m⏎\033[m"
+set waitmsg "\033[1;31m--------------- ~~~~~~~~~~ ----------------⏎\033[m\n\n"
 
 set timefmt "2006-01-02 15:04:05 "
 set infotimefmtnew '01.02 15:04'
@@ -128,7 +128,7 @@ map <delete> delete
 # use enter for shell commands
 map <enter> shell
 
- show the result of execution of previous commands
+# show the result of execution of previous commands
 map ` !true
 
 # execute current file (must be executable)
