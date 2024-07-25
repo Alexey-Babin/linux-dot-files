@@ -42,11 +42,11 @@ fi
 
 info "Updating apt..."
 "$SUDO" apt update \
-  && "$SUDO" apt upgrade \
-  && "$SUDO" apt dist-upgrade \
-  && "$SUDO" apt autoremove \
-  && "$SUDO" apt autoclean \
-  && "$SUDO" apt clean
+  && "$SUDO" apt upgrade -y\
+  && "$SUDO" apt dist-upgrade -y\
+  && "$SUDO" apt autoremove -y\
+  && "$SUDO" apt autoclean -y\
+  && "$SUDO" apt clean -y
 
 # PACKAGE INSTALLATION TOOLS
 # nala (https://gitlab.com/volian/nala)
@@ -222,8 +222,12 @@ else
   success "oh-my-tmux is already installed"
 fi
 
+# Lynx - text browser
+info "Installing lynx - text browser"
+instprog lynx "$SUDO nala install lynx -y"
+
 # Finalizing - clean after all installation
-"$SUDO" nala autoremove
+"$SUDO" nala autoremove -y
 
 [[ -f .zshrc.pre-oh-my-zsh ]] && mv .zshrc.pre-oh-my-zsh .zshrc
 
