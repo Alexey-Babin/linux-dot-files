@@ -4,6 +4,8 @@ if [ "$(command -v lsd)" ]; then
   alias ls="lsd"
 fi
 
+alias sudo='sudo '
+
 alias ll="ls -AlF"
 alias lla="ll -A"
 alias l="ls -F"
@@ -15,6 +17,8 @@ alias l1="ls -1 -F"
 # Add confirmation when losing files
 alias rm="rm -i"
 alias mv="mv -i"
+
+alias chmod="chmod --preserve-root"
 
 alias fd=fdfind
 
