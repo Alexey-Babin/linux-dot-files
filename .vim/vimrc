@@ -225,6 +225,7 @@ call plug#begin('~/.vim/plugged')
 
     " NERD Commenter (leader + cc; leader + cu)
     Plug 'preservim/nerdcommenter'
+
 call plug#end()
 " }}}
 

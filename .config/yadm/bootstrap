@@ -230,6 +230,13 @@ if ! command -v cht.sh ; then
 fi
 
 
+# zoxide - replacement for cd
+if ! command -v zoxide ; then
+  curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+  eval "$(zoxide init bash)"
+  eval "$(zoxide init zsh)"
+fi
+
 # Finalizing - clean after all installation
 "$SUDO" nala autoremove -y
 
