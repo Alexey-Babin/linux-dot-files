@@ -223,7 +223,7 @@ info "Installing lynx - text browser"
 instprog lynx "$SUDO nala install lynx -y"
 
 # Cheat sheet https://github.com/chubin/cheat.sh
-if ! command -v cht.sh ; then 
+if ! command -v cht.sh > /dev/null 2>&1 ; then 
   info "Installing cheat.sh client"
   curl https://cht.sh/:cht.sh > "$HOME/bin/cht.sh"
   chmod +x "$HOME/bin/cht.sh"
@@ -231,7 +231,7 @@ fi
 
 
 # zoxide - replacement for cd
-if ! command -v zoxide ; then
+if ! command -v zoxide > /dev/null 2>&1 ; then
   curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
   eval "$(zoxide init bash)"
   eval "$(zoxide init zsh)"
