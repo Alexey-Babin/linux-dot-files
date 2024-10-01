@@ -57,7 +57,7 @@ info "Installing deborphan"
 instprog deborphan "$SUDO nala install deborphan -y"
 
 info "Installing lanugage pack"
-$SUDO apt-get install language-pack-ru
+$SUDO apt-get install -y language-pack-ru
 
 info "Installing curl"
 instprog curl "$SUDO nala install curl -y"
@@ -199,13 +199,9 @@ instprog duf "$SUDO nala install duf -y"
 
 info "Installing dust - beautiful tree showing disk occupied"
 instprog dust "cargo install du-dust"
-#if ! command -v dust > /dev/null 2>&1 ; then
-#  curl --location --remote-name --remote-header-name https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb
-#  "$SUDO" dpkg -i du-dust_0.8.6_amd64.deb
-#  rm du-dust_0.8.6_amd64.deb
-#else
-#  success "Dust is already installed"
-#fi
+
+info "Installing procs - Modern Process List"
+instprog procs "cargo install procs"
 
 info "Installing urlview"
 instprog urlview "$SUDO nala install urlview -y"
@@ -225,6 +221,14 @@ fi
 # Lynx - text browser
 info "Installing lynx - text browser"
 instprog lynx "$SUDO nala install lynx -y"
+
+# Cheat sheet https://github.com/chubin/cheat.sh
+if ! command -v cht.sh ; then 
+  info "Installing cheat.sh client"
+  curl https://cht.sh/:cht.sh > "$HOME/bin/cht.sh"
+  chmod +x "$HOME/bin/cht.sh"
+fi
+
 
 # Finalizing - clean after all installation
 "$SUDO" nala autoremove -y

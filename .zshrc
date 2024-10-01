@@ -51,6 +51,9 @@ source $ZSH/oh-my-zsh.sh
 # zsh completions: https://github.com/zsh-users/zsh-completions
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
+# zsh completion for procs
+source <(procs --gen-completion-out zsh)
+
 [ -f "$HOME/.commonrc" ] && source "$HOME/.commonrc"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
