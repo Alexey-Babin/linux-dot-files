@@ -1,8 +1,8 @@
-set icons
-set hidden
+set icons true
+set hidden true
 set previewer ~/.config/lf/pv.sh
 # interpreter for shell commands
-set shell zsh
+set shell sh
 
 set promptfmt "
 \033[38;2;35;38;39;48;2;202;31;31m

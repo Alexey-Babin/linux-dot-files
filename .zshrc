@@ -64,5 +64,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # zsh completion for procs
-source <(procs --gen-completion-out zsh)
+if [ "$(command -v procs > /dev/null 2>&1 )" ]; then
+  source <(procs --gen-completion-out zsh)
+fi
 
