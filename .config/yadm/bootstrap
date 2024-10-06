@@ -79,14 +79,14 @@ instprog rg "$SUDO nala install ripgrep -y"
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
 info "Installing fzf"
-instprog fzf "sudo nala install fzf -y"
-fzf_repo="$HOME/programz/fzf.git"
+# instprog fzf "sudo nala install fzf -y"
+fzf_repo="$HOME/programs/fzf.git"
 if [ -d "$fzf_repo" ] ; then
-  cd "$fzf_repo"
-  git pull | grep -qv 'Already up to date.' || "$fzf_repo/install"
+  cd "$fzf_repo" || return
+  git pull | grep -qv 'Already up to date.' && "$fzf_repo/install" --all --xdg
 else
   git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_repo"
-  "$fzf_repo/install"
+  "$fzf_repo/install" --all --xdg
 fi
 
 # Shellcheck - tool for spell checking of bash scripts (a.e. in vim)
@@ -123,15 +123,15 @@ rustup update
 
 # Rust crates + common packages
 info "Installing lsd - color ls" 
-instprog lsd "sudo nala install lsd"
+instprog lsd "sudo nala install lsd -y"
 cargo install lsd
 
 info "Installing dust - beautiful tree showing disk occupied"
-instprog dust "sudo nala install du-dust"
+# instprog dust "sudo nala install du-dust"
 cargo install du-dust
 
 info "Installing procs - Modern Process List"
-instprog procs "cargo install procs"
+cargo install procs
 
 # RUST}}}
 
@@ -212,8 +212,8 @@ wget https://github.com/gokcehan/lf/releases/latest/download/lf-linux-amd64.tar.
 # cloning repo
 lf_repo="$HOME/programs/lf.git"
 if [ -d "$lf_repo" ] ; then 
-	cd "$lf_repo"
-	git pull | grep -qv 'Already up to date.' || {
+	cd "$lf_repo" || return
+	git pull | grep -qv 'Already up to date.' && {
 		sudo install -D "$lf_repo/etc/lfcd.sh" /etc/profile.d/lfcd.sh -m 755
 		sudo install -D "$lf_repo/etc/lfcd.sh" /usr/share/zsh/lfcd.sh -m 755
 		install -D "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 644
@@ -268,7 +268,8 @@ fi
 
 # Finalizing - clean after all installation
 "$SUDO" nala autoremove -y
+[[ -z "$(deborphan)" ]] || "$SUDO" nala remove "$(deborphan)" -y
+
+"$SUDO" update-alternatives --set editor /usr/bin/vim.basic
 
 [[ -f .zshrc.pre-oh-my-zsh ]] && mv .zshrc.pre-oh-my-zsh .zshrc
-
-"$SUDO" update-alternatives --config editor

@@ -98,3 +98,7 @@ fi
 #fi
 #alias tmux="TERM=screen-256color-bce tmux"
 
+. "$HOME/.cargo/env"
+
+
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash

@@ -29,3 +29,4 @@ fi
 
 # Timezones
 export TZ='Europe/Moscow'
+. "$HOME/.cargo/env"
