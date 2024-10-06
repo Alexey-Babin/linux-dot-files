@@ -89,8 +89,6 @@ fi
 #    exec /usr/bin/zsh
 # fi
 
-[ -f ~/.fzf.bash ] && source "$HOME/.fzf.bash"
-
 #if [[ "$TERM" != "screen-256color" ]]; then
   #tmux_session=$(echo "$USER" | tr . -)  
   #tmux attach-session -t "$tmux_session" || tmux new-session -s "$tmux_session"
@@ -102,3 +100,6 @@ fi
 
 
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+
+command -v zoxide > /dev/null 2>&1 && eval "$(zoxide init bash)"
+

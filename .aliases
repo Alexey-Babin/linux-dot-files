@@ -26,4 +26,4 @@ alias man="man -L ru"
 # sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-[ "$(command -v lf > /dev/null 2>&1)" ] && alias sudolf="sudo \"$HOME/bin/lf\""
+command -v lf > /dev/null 2>&1 && alias sudolf="sudo $(command -v lf)"

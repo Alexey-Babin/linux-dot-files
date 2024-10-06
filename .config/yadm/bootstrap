@@ -133,6 +133,13 @@ cargo install du-dust
 info "Installing procs - Modern Process List"
 cargo install procs
 
+info "Installing zoxide - CD replacement"
+instprog zoxide "sudo nala install zoxide"
+cargo install zoxide
+
+# Obvious Unified Compression Helper  https://github.com/ouch-org/ouch
+info "Installing ouch - Obvious Unified Compression Helper"
+
 # RUST}}}
 
 
@@ -215,14 +222,14 @@ if [ -d "$lf_repo" ] ; then
 	cd "$lf_repo" || return
 	git pull | grep -qv 'Already up to date.' && {
 		sudo install -D "$lf_repo/etc/lfcd.sh" /etc/profile.d/lfcd.sh -m 755
-		sudo install -D "$lf_repo/etc/lfcd.sh" /usr/share/zsh/lfcd.sh -m 755
+		sudo install -D "$lf_repo/etc/lfcd.sh" /usr/share/zsh/site-functions/lfcd.sh -m 755
 		install -D "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 644
 		install -D "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 644
 	}
 else 
 	git clone  https://github.com/gokcehan/lf.git "$lf_repo"
 	sudo install -D "$lf_repo/etc/lfcd.sh" /etc/profile.d/lfcd.sh -m 755
-	sudo install -D "$lf_repo/etc/lfcd.sh" /usr/share/zsh/lfcd.sh -m 755
+	sudo install -D "$lf_repo/etc/lfcd.sh" /usr/local/share/zsh/site-functions/lfcd -m 755
 	install -D "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 644
 	install -D "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 644
 fi

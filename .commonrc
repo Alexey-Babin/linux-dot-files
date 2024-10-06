@@ -11,9 +11,10 @@ if test -x /usr/bin/lesspipe; then
 fi
 
 export PAGER="less"
-# export LESSOPEN="| ~/.lessfilter %s"
-export LESSOPEN="|/usr/local/bin/lesspipe.sh %s"
-export LESS='-r'
+export LESSOPEN="| ~/.lessfilter %s"
+# export LESSOPEN="| /usr/local/bin/lesspipe.sh %s"
+# export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+export LESS='-R'
 export MANPAGER="vim -M +MANPAGER -"
 # export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export BAT_PAGER="less -RF"

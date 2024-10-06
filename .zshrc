@@ -46,6 +46,7 @@ plugins=(
     zsh-autosuggestions
 )
 
+
 source $ZSH/oh-my-zsh.sh
 
 # zsh completions: https://github.com/zsh-users/zsh-completions
@@ -64,7 +65,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # zsh completion for procs
-if [ "$(command -v procs > /dev/null 2>&1 )" ]; then
-  source <(procs --gen-completion-out zsh)
-fi
+command -v procs > /dev/null 2>&1 && source <(procs --gen-completion-out zsh)
+
+# zoxide (aka z replacement for cd)
+command -v zoxide > /dev/null 2>&1 && eval "$(zoxide init zsh)"
+
 
