@@ -49,6 +49,8 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+source /usr/local/share/zsh/site-functions/lfcd.sh
+
 # zsh completions: https://github.com/zsh-users/zsh-completions
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
