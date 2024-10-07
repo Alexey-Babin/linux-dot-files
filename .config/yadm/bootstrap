@@ -275,7 +275,8 @@ fi
 
 # Finalizing - clean after all installation
 "$SUDO" nala autoremove -y
-[[ -z "$(deborphan)" ]] || "$SUDO" nala remove "$(deborphan)" -y
+[[ -n "$(sudo deborphan --guess-common)" ]] && \
+  "$SUDO" deborphan --guess-common | xargs "$SUDO" nala purge -y
 
 "$SUDO" update-alternatives --set editor /usr/bin/vim.basic
 
