@@ -11,7 +11,8 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " fixes glitch? in colors when using vim with tmux
 set t_Co=256
 
-colorscheme kolor
+
+colorscheme lunaperche  " раньше было kolor, но там ошибки подсвечиваются плохо
 set background=dark
 
 syntax enable
@@ -226,6 +227,8 @@ call plug#begin('~/.vim/plugged')
     " NERD Commenter (leader + cc; leader + cu)
     Plug 'preservim/nerdcommenter'
 
+    Plug 'elzr/vim-json'
+    Plug 'hjson/vim-hjson'
 call plug#end()
 " }}}
 
