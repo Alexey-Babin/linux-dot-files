@@ -1,8 +1,17 @@
 set icons true
-set hidden true
-set previewer ~/.config/lf/pv.sh
+set hidden!
+set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
+
+set period 1 # sec - to check directory updates
+#line numbers
+set relativenumber
+set number
+
+
+set previewer ~/.config/lf/preview
+
 # interpreter for shell commands
-set shell sh
+set shell bash
 
 set promptfmt "
 \033[38;2;35;38;39;48;2;202;31;31m
@@ -48,6 +57,16 @@ set infotimefmtold '01.02.06'
 set errorfmt "\033[1;31m"
 set numberfmt "\033[38;2;75;87;116m"
 
+set ruller 'df:acc:progress:selection:filter:ind'
+set dircounts
+set tabstop 4
+set scrolloff 5
+set wrapscroll
+
+set sixel 
+
+# =========================== UI ======================================================
+%test $LF_LEVEL -eq 1 || >&2 printf "Warning: you are in a nested lf instance!"
 
 # =========================== COMMANDS ================================================
 # define a custom 'open' command
@@ -71,35 +90,37 @@ cmd rename %[ -e $1 ] && printf "file exists" || mv $f $1
 %mkdir -p ~/.trash
 cmd trash %set -f; mv $fx ~/.trash
 
-# cmd delete ${{
-#  clear; tput cup $(($(tput lines)/3)); tput bold
-#  set -f
-#  printf -- "%s\n" $fx | sed 's|'"$HOME"'||'
-#  printf "\033[1;33mDelete? \033[37m[\033[32my\033[37m/\033[31mn\033[37m]\033[m "
-#  read -r REPLY
-#  case "$REPLY" in
-#    [yY]) rm -rf -- $fx ;;
-#  esac
-#}}
+
+cmd delete ${{
+  clear; tput cup $(($(tput lines)/3)); tput bold
+  set -f
+  printf -- "%s\n" $fx | sed 's|'"$HOME"'||'
+  printf "\033[1;33mDelete? \033[37m[\033[32my\033[37m/\033[31mn\033[37m]\033[m "
+  read -r -n 1 REPLY
+  case "$REPLY" in
+    [yY]) rm -rf -- $fx ;;
+  esac
+}}
 
 cmd chmodx ${{
+  clear;
   chmod u+x $fx
   lf -remote "send $id reload"
 }}
 
-# extract the current file with the right command
+# extract the current file 
 cmd extract ${{
-    set -f
-    aunpack $fx
-#    case $f in
-#        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
-#        *.tar.gz|*.tgz) tar xzvf $f;;
-#        *.tar.xz|*.txz) tar xJvf $f;;
-#        *.zip) unzip $f;;
-#        *.rar) unrar x $f;;
-#        *.7z) 7z x $f;;
-#    esac
+  clear; 
+  tput cup $(($(tput lines)/3)); tput bold
+  set -f
+  printf -- "%s\n" $fx | sed 's|'"$HOME"'||'
+  printf "\t\033[1;34mExtract? \033[37m[\033[32my\033[37m/\033[31mN\033[37m]\033[m "
+  read -r -n 1 REPLY
+  case "$REPLY" in
+    [yY]) aunpack $fx ;;
+  esac
 }}
+
 
 # compress current file or selected files with tar and gunzip
 cmd tar ${{
@@ -120,7 +141,7 @@ cmd zip ${{
 }}
 
 cmd tst ${{
-  echo $1
+  echo $fx
 }}
 # =========================== MAPPINGS ================================================
 map <delete> delete
@@ -130,20 +151,23 @@ map <enter> shell
 
 # show the result of execution of previous commands
 map ` !true
+map <c-o> !true
 
 # execute current file (must be executable)
-map x $$f
-map X !$f
+map x $"$f"
+map X !"$f"
 
 # dedicated keys for file opener actions
-map o &mimeopen $f
-map O $mimeopen --ask $f
+# map o &mimeopen $f
+# map O $mimeopen --ask $f
 
 # map a :push %mkdir<space>
 map r push :rename<space>
 
-map <c-f> $lf -remote "send $id select \"$(fzf)\""
+map E extract
 
+
+map <c-f> $lf -remote "send $id select \"$(fzf)\""
 
 # ----- zoxide integration
 cmd z %{{

@@ -265,6 +265,12 @@ if ! command -v cht.sh > /dev/null 2>&1 ; then
   chmod +x "$HOME/bin/cht.sh"
 fi
 
+# exiftool 
+info "Installing exiftool"
+instprog exiftool "$SUDO nala install exiftool -y"
+
+info "Installing jq"
+instprog jq "$SUDO nala install jq -y"
 
 # zoxide - replacement for cd
 if ! command -v zoxide > /dev/null 2>&1 ; then
