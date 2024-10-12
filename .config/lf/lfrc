@@ -57,8 +57,10 @@ set infotimefmtold '01.02.06'
 set errorfmt "\033[1;31m"
 set numberfmt "\033[38;2;75;87;116m"
 
+set info size
+set dircounts false
+
 set ruller 'df:acc:progress:selection:filter:ind'
-set dircounts
 set tabstop 4
 set scrolloff 5
 set wrapscroll
