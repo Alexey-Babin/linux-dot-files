@@ -1,0 +1,123 @@
+#!/bin/bash
+
+# File preview handler for lf
+# Dependencies^
+# - GNU 'file' file detector
+# - batcat (text)
+# - chafa (images)
+# - exiftool (metadata)
+# - jq (json)
+# - lynx (html)
+#
+#
+
+
+# -C prevents output redirection using '>', '>&' from overwriting existiong files
+# -f disables filename expansion (globbing)
+set -C -f
+
+IFS='
+'
+
+image() {
+  if [ -n "$TMUX" ]; then
+   chafa -s "$2x$3" -f symbols --passthrough tmux "$1"
+  else
+    chafa  -f sixel --animate off --polite on "$1"
+
+    # chafa --polite on -f sixel -c 256 --align center,top "$1"
+  fi
+}
+
+mime_preview() {
+  case "$mime_type","$ran_guard" in
+    (image/*,0)
+      image "$@"
+      ;;
+    ##########################################################################
+    (text/html,0)
+      lynx -width "$4" -display-charset=utf-8 -dump -- "$1"
+      ;;
+    ##########################################################################
+    (text/troff,0)
+      case "${1##*.}" in
+        ([0-9] | [01]p | [23]*)
+          man ./ "$1" | col -b
+          ;;
+        (*)
+          batcat --terminal-width "$(($4*7/9))" -f "$1" --syle=numbers
+      esac
+      ;;
+    ##########################################################################
+    (text/*,0 | */xml,0 | application/javascript,0 | application/x-subrip,0)
+      batcat --terminal-width "$(($4*7/9))" -f "$1" --style=numbers
+    ##########################################################################
+    (application/x-pie-executable,0 | application/x-executable,0 | application/x-sharedlib,0)
+      objdump -d "$1" -M intel
+      ;;
+    ##########################################################################
+    (application/json,0)
+      jq -C < "$1"
+      ;;
+    ##########################################################################
+    (application/zip,0 | application/x-7z-compressed,0)
+      atool --list -- "$1"
+      ;;
+    ##########################################################################
+    (application/x-tar,0)
+      tar -tf "$1"
+      ;;
+    ##########################################################################
+    (audio/*,0 | video/*)
+      exiftool -j "$1" | jq -C
+      ;;
+    ##########################################################################
+    (*/pdf,0 | */postscript,0)
+      pdftotext "$1"
+      ;;
+    ##########################################################################
+    (*opendocument*,0)
+      bytes="$(du -sb "$1" | cut -f 1)"
+      if [ "$bytes" -lt 150000 ]; then
+        odt2txt "$1"
+      else
+        printf "File is too big to preview\n\n"
+        exiftool -j "$1" | jq -C
+      fi
+      ;;
+    ##########################################################################
+    (text/rtf,9 | *msword,0 )
+      catdoc -- "$1"
+      ;;
+    ##########################################################################
+    (application/pgp-encrypted,0)
+		printf "PGP armored ASCII \033[1;31mencrypted\033[m file,\ntry using gpg to decrypt it\n\n"
+		cat "$1"
+		#gpg -d -- "$1"
+	;;
+    ##########################################################################
+	(application/octet-stream,0)
+		#extension="${1##*.}" extension="${extension%"$1"}"
+		case "${1##*.}" in
+		(gpg)
+			printf "OpenPGP \033[1;31mencrypted\033[m file,\ntry using gpg to decrypt it\n\n"
+		;;
+		(*) 
+          file -b --dereference "$1" | tr "," "\n"
+		  # exiftool -j "$1" | jq -C
+		esac
+	;;
+    (*,*)
+      file -b --dereference "$1" | tr "," "\n"
+    ##########################################################################
+    esac
+  return 1
+}
+
+main () {
+  mime_type="$(file --dereference -b --mime-type -- "$1")" \
+    ran_guard=0
+  mime_preview "$@" || return $?
+}
+
+main "$@" || exit $?
