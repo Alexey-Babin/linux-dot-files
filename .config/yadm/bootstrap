@@ -82,8 +82,9 @@ info "Installing fzf"
 # instprog fzf "sudo nala install fzf -y"
 fzf_repo="$HOME/programs/fzf.git"
 if [ -d "$fzf_repo" ] ; then
-  cd "$fzf_repo" || return
-  git pull | grep -qv 'Already up to date.' && "$fzf_repo/install" --all --xdg
+  cd "$fzf_repo" && \
+    git pull | grep -qv 'Already up to date.' && \
+    "$fzf_repo/install" --all --xdg
 else
   git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_repo"
   "$fzf_repo/install" --all --xdg
