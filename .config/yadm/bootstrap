@@ -79,7 +79,7 @@ instprog rg "$SUDO nala install ripgrep -y"
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
 info "Installing fzf"
-# instprog fzf "sudo nala install fzf -y"
+instprog fzf "sudo nala install fzf -y"
 fzf_repo="$HOME/programs/fzf.git"
 if [ -d "$fzf_repo" ] ; then
   cd "$fzf_repo" && \
