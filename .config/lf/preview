@@ -19,7 +19,7 @@ set -C -f
 IFS='
 '
 
-image() {
+function image {
   if [ -n "$TMUX" ]; then
    chafa -s "$2x$3" -f symbols --passthrough tmux "$1"
   else
@@ -45,12 +45,12 @@ mime_preview() {
           man ./ "$1" | col -b
           ;;
         (*)
-          batcat --terminal-width "$(($4*7/9))" -f "$1" --syle=numbers
+          batcat --terminal-width "$(($4*7/9))" -f "$1" --syle=numbers --line-range=:500
       esac
       ;;
     ##########################################################################
     (text/*,0 | */xml,0 | application/javascript,0 | application/x-subrip,0)
-      batcat --terminal-width "$(($4*7/9))" -f "$1" --style=numbers
+      batcat --terminal-width "$(($4*7/9))" -f "$1" --style=numbers --line-range=:500
     ##########################################################################
     (application/x-pie-executable,0 | application/x-executable,0 | application/x-sharedlib,0)
       objdump -d "$1" -M intel

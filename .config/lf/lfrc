@@ -67,6 +67,9 @@ set wrapscroll
 
 set sixel 
 
+# set PAGER=batcat
+
+
 # =========================== UI ======================================================
 %test $LF_LEVEL -eq 1 || >&2 printf "Warning: you are in a nested lf instance!"
 
