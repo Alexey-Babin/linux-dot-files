@@ -36,7 +36,7 @@ mime_preview() {
       ;;
     ##########################################################################
     (text/html,0)
-      lynx -width "$4" -display-charset=utf-8 -dump -- "$1"
+      elinks -dump-width "$4" -dump-charset utf-8 -dump "$1"
       ;;
     ##########################################################################
     (text/troff,0)
@@ -48,9 +48,17 @@ mime_preview() {
           batcat --terminal-width "$(($4*7/9))" -f "$1" --syle=numbers --line-range=:500
       esac
       ;;
+    (text/csv,0)
+      pspg --ni "$1"
+      ;;
     ##########################################################################
     (text/*,0 | */xml,0 | application/javascript,0 | application/x-subrip,0)
-      batcat --terminal-width "$(($4*7/9))" -f "$1" --style=numbers --line-range=:500
+      if [ "${1##*.}" = "tsv" ] ; then
+        pspg --ni "$1"
+      else
+        batcat --terminal-width "$(($4*7/9))" -f "$1" --style=numbers --line-range=:500
+      fi
+      ;;
     ##########################################################################
     (application/x-pie-executable,0 | application/x-executable,0 | application/x-sharedlib,0)
       objdump -d "$1" -M intel

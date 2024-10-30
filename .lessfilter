@@ -2,6 +2,9 @@
 mime_type="$(file --dereference -b --mime-type -- "$1")"
 
 case "$mime_type" in
+  (text/csv)
+    pspg --ni "$1"
+    ;;
   (text/*|*/xml|application/javascript|application/x-subrip)
     batcat -f --style=plain "$1"
     ;;

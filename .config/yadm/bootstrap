@@ -260,9 +260,12 @@ fi
 info "Installing pspg - PosgtreSQL pager"
 instprog pspg "$SUDO nala install pspg -y"
 
-# Lynx - text browser
-info "Installing lynx - text browser"
-instprog lynx "$SUDO nala install lynx -y"
+# # Lynx - text browser
+# info "Installing lynx - text browser"
+# instprog lynx "$SUDO nala install lynx -y"
+
+info "Installing elinks - text browser"
+instprog elinks "$SUDO nala install elinks -y"
 
 # Cheat sheet https://github.com/chubin/cheat.sh
 if ! command -v cht.sh > /dev/null 2>&1 ; then 
