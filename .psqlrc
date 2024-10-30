@@ -2,8 +2,10 @@
 
 -- uncomment if no pspg installed
 -- \setenv PAGER 'less -X --chop-long-lines'
--- \setenv LESS -imx4F
 \setenv PSQL_PAGER 'pspg -X --pgcli-fix --style=2 --no-topbar'
+\set x '\\setenv PSQL_PAGER ''less -X -S'''
+\set xx '\\setenv PSQL_PAGER ''pspg -X --pgcli-fix --style=2 --no-topbar'''
+
 
 select case substring(current_setting('cluster_name'), '\/(.*$)')
         when 'alpha' then 'α' 
@@ -36,5 +38,8 @@ where rolname = current_user \gset
 
 \pset linestyle unicode
 \pset unicode_header_linestyle double
+
+\pset border 2
+\pset null ∅
 
 \unset QUIET
