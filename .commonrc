@@ -22,6 +22,8 @@ export BAT_PAGER="less -RF"
 export EDITOR='vim'
 export HISTCONTROL=ignoredups
 
+export PSPG_CONF="$HOME/.config/pspg/.pspgconf"
+
 # enable color support of ls and also add handy aliases
 if test -x /usr/bin/dircolors; then
     if test -r ~/.dircolors; then
@@ -47,7 +49,7 @@ help() {
 
 # Date and Timezone, Lang, Locale etc.
 export TZ='Europe/Moscow'
-export LANG=en_US.UTF-8
+export LANG=ru_RU.UTF-8
 
 # shellcheck source=/dev/null
 if test -f "$HOME"/.aliases; then

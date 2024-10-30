@@ -255,6 +255,11 @@ else
   success "oh-my-tmux is already installed"
 fi
 
+# pspg - PosgreSQL pager
+
+info "Installing pspg - PosgtreSQL pager"
+instprog pspg "$SUDO nala install pspg -y"
+
 # Lynx - text browser
 info "Installing lynx - text browser"
 instprog lynx "$SUDO nala install lynx -y"
