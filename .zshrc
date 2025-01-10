@@ -42,6 +42,7 @@ plugins=(
     git
 #    fd
     fzf-tab
+    zsh-fzf-history-search
     zsh-syntax-highlighting
     zsh-autosuggestions
 )
