@@ -61,9 +61,7 @@ if test -f "$HOME"/.aliases; then
 fi
 
 # shellcheck source=/dev/null
-if test -f "${XDG_CACHE_HOME:-$HOME/.config}/fzf.config.sh"; then
-    . "${XDG_CACHE_HOME:-$HOME/.config}/fzf.config.sh"
-fi
+[ -f "${XDG_CACHE_HOME:-$HOME/.config}/fzf/fzf.config.sh" ] && . "${XDG_CACHE_HOME:-$HOME/.config}/fzf/fzf.config.sh"
 
 # shellcheck source=/dev/null
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"

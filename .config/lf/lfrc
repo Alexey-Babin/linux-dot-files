@@ -8,7 +8,7 @@ set relativenumber
 set number
 
 
-set previewer ~/.config/lf/preview
+set previewer ~/scripts/preview
 
 # interpreter for shell commands
 set shell bash
