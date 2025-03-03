@@ -33,8 +33,6 @@ instprog() {
 
 #####################################################################
 # MAIN
-[ -z "$(git config user.name)" ] && git config --global user.name "Alexey Babin"
-[ -z "$(git config user.email)" ] && git config --global user.email "Alexey.Babin@iibbank.com"
 
 mkdir -p "$HOME/bin"
 mkdir -p "$HOME/programs"
@@ -79,7 +77,7 @@ instprog rg "$SUDO nala install ripgrep -y"
 # fzf (Command Line Fuzzy Finder)
 # https://github.com/junegunn/fzf
 info "Installing fzf"
-instprog fzf "sudo nala install fzf -y"
+instprog fzf "$SUDO nala install fzf -y"
 fzf_repo="$HOME/programs/fzf.git"
 if [ -d "$fzf_repo" ] ; then
   cd "$fzf_repo" && \
@@ -119,7 +117,7 @@ instprog neofetch "$SUDO nala install neofetch -y"
 info "RUST and crates"
 instprog cc "$SUDO nala install build-essential -y"
 info "Updating rustup (installing if needed)..."
-instprog "rustup" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+instprog "rustup" "sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) --quiet -y"
 rustup update
 
 # Rust crates + common packages
