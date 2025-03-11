@@ -1,8 +1,11 @@
 #!/bin/sh
+
+# Common .rc file for both bash and zsh
+
 # Tune manuals
 export MANPATH="/usr/local/man:$MANPATH"
 
-export PATH="$HOME/programs/fzf.git/bin:$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/scripts:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/scripts:/usr/local/bin:$PATH"
 
 # Pagers: less, bat etc...
 # make less more friendly for non-text input files, see lesspipe(1)
@@ -12,20 +15,16 @@ fi
 
 export PAGER="less"
 export LESSOPEN="| ~/.lessfilter %s"
-# export LESSOPEN="| /usr/local/bin/lesspipe.sh %s"
-# export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 export LESS='-R -S'
-# export MANPAGER="vim -M +MANPAGER -"
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export MANROFFOPT="-c"
 export BAT_PAGER="less -RF"
 export EDITOR='vim'
 export HISTCONTROL=ignoredups
-
-export PSPG_CONF="$HOME/.config/pspg/.pspgconf"
-export PG_PAGER="pspg -X"
-export PG_COLORS="error=01;31:warning=01;20:note=01;36:locus=01"
-export PG_COLOR="always"
+command -v pspg >/dev/null && export PSPG_CONF="$HOME/.config/pspg/.pspgconf"
+command -v psql >/dev/null && export PG_PAGER="pspg -X"
+command -v psql >/dev/null && export PG_COLORS="error=01;31:warning=01;20:note=01;36:locus=01"
+command -v psql >/dev/null && export PG_COLOR="always"
 
 
 # enable color support of ls and also add handy aliases
@@ -54,11 +53,11 @@ help() {
 # Date and Timezone, Lang, Locale etc.
 export TZ='Europe/Moscow'
 export LANG=ru_RU.UTF-8
+export LC_MESSAGES=POSIX
 
 # shellcheck source=/dev/null
-if test -f "$HOME"/.aliases; then
-    . "$HOME/.aliases"
-fi
+[ -f "$HOME"/.aliases ] && . "$HOME/.aliases"
+
 
 # shellcheck source=/dev/null
 [ -f "${XDG_CACHE_HOME:-$HOME/.config}/fzf/fzf.config.sh" ] && . "${XDG_CACHE_HOME:-$HOME/.config}/fzf/fzf.config.sh"
@@ -72,9 +71,9 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # work with GPG encoded content
 GPG_TTY="$TTY"
 export GPG_TTY
-export PYENV_ROOT="$HOME/.pyenv"
 
-# pyenv - if installed
+# pyenv
+[ -d "$HOME/.pyenv" ] && export PYENV_ROOT="$HOME/.pyenv"
 if [ -e "$PYENV_ROOT/bin" ] ; then
   command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
   eval "$(pyenv init -)"
