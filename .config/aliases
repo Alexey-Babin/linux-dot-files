@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# enable color support of ls and also add handy aliases
+if test -x /usr/bin/dircolors; then
+    if test -r ~/.dircolors; then
+        eval "$(dircolors -b ~/.dircolors)"
+    else
+        eval "$(dircolors -b)"
+    fi
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+command -v lsd >/dev/null 2>&1 && alias ls="lsd --group-dirs=first"
+
+alias sudo='sudo '
+
+alias ll="ls -AlF"
+alias lla="ll -A"
+alias l="ls -F"
+alias la="ls -A"
+alias l1="ls -1 -F"
+
+# Add confirmation when losing files
+alias rm="rm -i"
+alias mv="mv -i"
+alias chmod="chmod --preserve-root"
+alias man="man -L ru"
+
+# Add an "alert" alias for long running commands.  Use like so:
+# sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history | tail -n1 | sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+#shellcheck disable=SC2139
+command -v lf >/dev/null 2>&1 && alias sudolf="sudo $(command -v lf)"
+command -v fdfind > /dev/null 2>&1 && alias fd=fdfind
+
+# color support for --help with bathelp
+command -v batcat >/dev/null 2>&1 && alias bathelp='batcat --plain --language=help'
+
+hlp() {
+  if command -v bathelp > /dev/null 2>&1 ; then
+    "$@" --help 2>&1 | bathelp
+  else
+    "$@" --help
+  fi
+}
+
+help() {
+  if command -v bathelp > /dev/null 2>&1 ; then
+    command help "$@" 2>&1 | bathelp
+  else
+    command help "$@"
+  fi
+}
+

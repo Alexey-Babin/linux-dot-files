@@ -89,7 +89,7 @@ set wrap
 set linebreak           " Not break words when wrapping
 set scrolloff=10        " 10 lines under/above current line
 if has("multi_byte")
-  set showbreak=\u2026         " wrapped lines start with … character
+  set showbreak=…       " wrapped lines start with … character
 else
   set showbreak=>
 endif

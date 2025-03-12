@@ -81,7 +81,7 @@ if ! shopt -oq posix; then
     fi
 fi  
 
-[[ ! -s "$HOME/.commonrc" ]] || source "$HOME/.commonrc"
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/.commonrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/.commonrc"
 
 # -------------For domain accounts use zsh if it is installed --------------
 # if [[ -x /usr/bin/zsh ]] && [[ "$(whoami)" =~ .*"@iibbank.com" ]]; then
@@ -101,7 +101,7 @@ fi
 command -v zoxide > /dev/null 2>&1 && eval "$(zoxide init bash)"
 
 
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash ] && source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.bash
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.bash" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/fzf/fzf.bash"
 [ -f "$HOME/programs/fzf-tab-completion/bash/fzf-bash-completion.sh" ] && source "$HOME/programs/fzf-tab-completion/bash/fzf-bash-completion.sh"
 bind -x '"\t": fzf_bash_completion'
 
