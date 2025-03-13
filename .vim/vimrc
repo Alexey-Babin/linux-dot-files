@@ -235,6 +235,7 @@ call plug#end()
 " }}}
 
 " ----- Plugins settings ----- {{{
+    filetype plugin on
     " Nerd tree {{{
     nnoremap <C-n> :NERDTree<CR> 
     nnoremap <C-t> :NERDTreeToggle<CR> 
@@ -251,7 +252,7 @@ call plug#end()
     let g:airline#extensions#keymap#enabled = 0     " Не показывать текущий маппинг
     let g:airline_section_z = "\ue0a1:%l/%L Col:%c"  " Кастомная графа положения курсора
     let g:Powerline_symbols = 'unicode'
-    autocmd VimEnter AirlineTheme kolor
+"   autocmd VimEnter AirlineTheme kolor
     " }}} 
     
     " FZF key mappings
@@ -341,7 +342,17 @@ call plug#end()
     call which_key#register('<Space>', "g:which_key_map", "n")
     call which_key#register('<Space>', "g:which_key_map_visual", "v")
     
+    let g:codedark_conservative=1
+    let g:codedark_italics=1
+    let g:codedark_transparent=1
+    let g:airline_theme = 'codedark'
     colorscheme codedark
+
+    " scheme fine tuning
+    hi Comment guifg=#707070 ctermfg=darkgray
+    hi Visual guifg=#333333 guibg=darkgray
+    hi CursorLine guibg=#2D2D2D
+    hi Folded guifg=#888888
 " }}}
 
 " ----- Toggle Line Numbers (cycles between relative/absolute/none) ----- {{{
