@@ -12,8 +12,8 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set t_Co=256
 
 
-colorscheme lunaperche  " раньше было kolor, но там ошибки подсвечиваются плохо
-set background=dark
+" colorscheme codedark  " раньше было kolor, но там ошибки подсвечиваются плохо
+" set background=dark   " потом взяли из плагина
 
 syntax enable
 filetype on             " required
@@ -229,6 +229,8 @@ call plug#begin('~/.vim/plugged')
 
     Plug 'elzr/vim-json'
     Plug 'hjson/vim-hjson'
+
+    Plug 'tomasiser/vim-code-dark'
 call plug#end()
 " }}}
 
@@ -339,6 +341,7 @@ call plug#end()
     call which_key#register('<Space>', "g:which_key_map", "n")
     call which_key#register('<Space>', "g:which_key_map_visual", "v")
     
+    colorscheme codedark
 " }}}
 
 " ----- Toggle Line Numbers (cycles between relative/absolute/none) ----- {{{

@@ -30,6 +30,7 @@ export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
 HIST_STAMPS="yyyy-mm-dd"
 
 plugins=(
+    tmux
     git
     zsh-fzf-history-search
     zsh-syntax-highlighting
@@ -39,24 +40,28 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/common-profile" ]] && source "${XDG_CONFIG_HOME:-$HOME/.config}/common-profile"
+[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/common-profile" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/common-profile"
 
 [ -f "$HOME/programs/lf/etc/lfcd.sh" ] && source "$HOME/programs/lf/etc/lfcd.sh"
 
 
 # fzf and features
 [[ ! -s "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]] || source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
-[[ ! -s "$HOME/programs/fzf-tab-completion/zsh/fzf-zsh-completion.sh" ]] || source "$HOME/programs/fzf-tab-completion/zsh/fzf-zsh-completion.sh"
+[[ -f "$HOME/programs/fzf-tab-completion/zsh/fzf-zsh-completion.sh" ]] && source "$HOME/programs/fzf-tab-completion/zsh/fzf-zsh-completion.sh"
+
+# -----BEGIN fzf-tab-completion tuning (ansible managed) ----- 
 zstyle ':completion:*' fzf-search-display true
 zstyle ':completion:*' fzf-completion-opts --preview='eval $HOME/scripts/preview {1}'
 zstyle ':completion::*:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' fzf-completion-opts --preview='eval eval echo "{1}"'
 zstyle ':completion::*:(ps|kill):*' fzf-completion-opts --preview='
-eval set -- {+1}
-{ ps --forest -o pid=,cmd= -g "$(ps -o sid:1= -p "$@")" || pstree "$@" || echo "$@" } 2>/dev/null
+  eval set -- {+1}
+  { ps --forest -o pid=,cmd= -g "$(ps -o sid:1= -p "$@")" || pstree "$@" || echo "$@" } 2>/dev/null
 ' --preview-window='down,30%,border-horizontal,nohidden,nowrap' --multi
 zstyle ':completion::*:systemctl::*' fzf-completion-opts --preview='
-eval set -- {1}
-{ systemctl status $@ } 2>/dev/null'
+  eval set -- {1} { systemctl status $@ } 2>/dev/null
+'
+# -----END fzf-tab-completion tuning (ansible managed) ----- 
+
 
 # zsh completion for procs
 command -v procs > /dev/null 2>&1 && source <(procs --gen-completion-out zsh)
@@ -66,3 +71,4 @@ command -v zoxide > /dev/null 2>&1 && eval "$(zoxide init zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.config/.p10k.zsh.
 [[ ! -f ~/.config/.p10k.zsh ]] || source ~/.config/.p10k.zsh
+

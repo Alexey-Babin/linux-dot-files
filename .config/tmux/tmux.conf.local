@@ -382,7 +382,6 @@ bind - split-window -v
 set -g default-command /bin/zsh
 set -g default-shell /bin/zsh
 
-
 # -- tpm -----------------------------------------------------------------------
 
 # while I don't use tpm myself, many people requested official support so here

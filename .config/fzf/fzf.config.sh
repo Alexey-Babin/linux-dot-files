@@ -1,23 +1,30 @@
 #!/usr/bin/bash
 # Fuzzy finder configuration ()
-FD_OPTIONS="--follow --hidden --exclude .git --exclude node_modules"
+FD_OPTIONS="--color always --strip-cwd-prefix --max-depth 3 \
+	--follow --hidden --exclude .git --exclude node_modules \
+	--exclude .bak"
 
-export FZF_FILE_PREVIEW=" \
-   ([[ -d {} ]] && (lsd --tree --icon=auto --depth=3 {})) \
+export FZF_FILE_PREVIEW_LIGHT=" \
+   ([[ -d {} ]] && (ls -Alh {})) \
 || ([[ -f {} ]] && \
     ([[ \$(file --mime {}) =~ binary ]] && (file --dereference {}) || (batcat --color=always --plain {} || cat {})) \
 ) \
 || echo {} 2> /dev/null \
 | head -n $LINES"
 
-export FZF_FILE_PREVIEW_2="$HOME/scripts/preview {}"
+export FZF_FILE_PREVIEW_FULL="$HOME/scripts/preview {}"
+
+export FZF_FILE_PREVIEW="if command -v preview > /dev/null 2>&1 && ; then
+	$FZF_FILE_PREVIEW_FULL
+else
+	$FZF_FILE_PREVIEW_LIGHT
+fi"
 
 export FZF_DEFAULT_OPTS=" 
+	--ansi --cycle
     --tiebreak=chunk
     --height 50% --layout=reverse --border=rounded  
 	--scroll-off=1 --info=inline 
-    --preview='$FZF_FILE_PREVIEW_2' 
-    --preview-window=right:60%:hidden:wrap 
     --prompt='∷ ' 
     --multi
     --bind='ctrl-y:execute-silent(echo {+} | pbcopy)' 
@@ -31,12 +38,17 @@ export FZF_DEFAULT_OPTS="
 export FZF_COMPLETION_OPTS="
   --no-multi-line"
 
-export FZF_DEFAULT_COMMAND="fdfind $FD_OPTIONS \"$*\""
+export FZF_PREVIEW_OPTS=" \
+    --preview='$FZF_FILE_PREVIEW' \
+    --preview-window=right:60%:hidden:wrap "
+
+export FZF_DEFAULT_COMMAND="fdfind --type f $FD_OPTIONS \"$*\""
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="\
-    --prompt='All∷ '
-    --bind='ctrl-d:change-prompt(Directories∷ )+reload(fdfind . --type d $FD_OPTIONS)' \
-    --bind='ctrl-f:change-prompt(Files∷ )+reload(fdfind . --type f )' \
+    --prompt='Files∷ '
+	$FZF_PREVIEW_OPTS
+    --bind='ctrl-d:change-prompt(Directories∷ )+reload(fdfind . $FD_OPTIONS --type d )' \
+    --bind='ctrl-f:change-prompt(Files∷ )+reload(fdfind . $FD_OPTIONS --type f )' \
 "
 export FZF_ALT_C_COMMAND="fdfind --type d $FD_OPTIONS $*"
 

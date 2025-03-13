@@ -78,15 +78,23 @@ instprog rg "$SUDO nala install ripgrep -y"
 # https://github.com/junegunn/fzf
 info "Installing fzf"
 instprog fzf "$SUDO nala install fzf -y"
-fzf_repo="$HOME/programs/fzf.git"
+fzf_repo="$HOME/programs/fzf"
 if [ -d "$fzf_repo" ] ; then
   cd "$fzf_repo" && \
-    git pull | grep -qv 'Already up to date.' && \
-    "$fzf_repo/install" --all --xdg
+    git pull | grep -qv 'Already up to date.'  
 else
   git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_repo"
-  "$fzf_repo/install" --all --xdg
 fi
+"$fzf_repo/install" --all --xdg
+
+info "Installing fzf-tab-completion"
+fzf_tc_repo="$HOME/programs/fzf-tab-completion"
+if [ -d "$fzf_tc_repo" ] ; then
+  cd "$fzf_tc_repo" && git pull | grep -qv 'Already up to date.'
+else
+  git clone "https://github.com/lincheney/fzf-tab-completion.git" "$fzf_tc_repo"
+fi
+ln -s -f -T "$fzf_tc_repo/readline/bin/rl_custom_complete" "$HOME/.local/bin/rl_custom_complete" -m 755
 
 # Shellcheck - tool for spell checking of bash scripts (a.e. in vim)
 # https://github.com/koalaman/shellcheck
@@ -195,7 +203,8 @@ fi
 zsh_fzf_history_search=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search
 if [[ ! -d $zsh_fzf_history_search ]]; then
   info "Installing zsh-fzf-history-search"
-  git clone https://github.com/joshskidmore/zsh-fzf-history-search "${ZSH_CUSTOM:=$HOME/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search"
+  git clone https://github.com/joshskidmore/zsh-fzf-history-search \
+    "${ZSH_CUSTOM:=$HOME/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search"
 else
   success "zsh-fzf-history-search already installed"
 fi
@@ -219,25 +228,25 @@ info "Installing lf - light file manager r31"
 instprog lf "$SUDO nala install lf -y"
 
 # Last version - to user`s bin
+lf_target_dir="$HOME/programs/lf"
+mkdir -p "$lf_target_dir"
+mkdir -p "$HOME/.local/bin"
 wget https://github.com/gokcehan/lf/releases/latest/download/lf-linux-amd64.tar.gz -qO - \
-	| tar -xzf - -C ~/bin
+	| tar -xzf - -C "$lf_target_dir"
+ln -s -f -T "$lf_target_dir/lf" "$HOME/.local/bin/lf"
 
 # cloning repo
-lf_repo="$HOME/programs/lf.git"
+lf_repo="$HOME/programs/lf/repo"
 if [ -d "$lf_repo" ] ; then 
 	cd "$lf_repo" || return
 	git pull | grep -qv 'Already up to date.' && {
-		$SUDO install -D "$lf_repo/etc/lfcd.sh" /etc/profile.d/lfcd.sh -m 755
-		$SUDO install -D "$lf_repo/etc/lfcd.sh" /usr/share/zsh/site-functions/lfcd.sh -m 755
-		install -D "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 644
-		install -D "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 644
-	}
+		ln -s -f -T "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 755
+		ln -s -f -T "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 755
+	  }
 else 
 	git clone  https://github.com/gokcehan/lf.git "$lf_repo"
-	$SUDO install -D "$lf_repo/etc/lfcd.sh" /etc/profile.d/lfcd.sh -m 755
-	$SUDO install -D "$lf_repo/etc/lfcd.sh" /usr/local/share/zsh/site-functions/lfcd -m 755
-	install -D "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 644
-	install -D "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 644
+	ln -s -f -T "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 755
+	ln -s -f -T "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 755
 fi
 
 # LF }}}
@@ -251,7 +260,7 @@ instprog urlview "$SUDO nala install urlview -y"
 # Tmux and features
 info "Installing tmux and options"
 instprog tmux "$SUDO nala install tmux -y"
-oh_my_tmux_dir="$HOME/programs/.oh-my-tmux"
+oh_my_tmux_dir="$HOME/programs/oh-my-tmux"
 if [[ ! -d "$oh_my_tmux_dir" ]] ; then
   git clone https://github.com/gpakosz/.tmux.git "$oh_my_tmux_dir"
   mkdir -p "$HOME/.config/tmux"
@@ -276,7 +285,7 @@ instprog elinks "$SUDO nala install elinks -y"
 if ! command -v cht.sh > /dev/null 2>&1 ; then 
   info "Installing cheat.sh client"
   curl https://cht.sh/:cht.sh > "$HOME/bin/cht.sh"
-  chmod +x "$HOME/bin/cht.sh"
+  chmod +x "$HOME/.local/bin/cht.sh"
 fi
 
 # exiftool 
