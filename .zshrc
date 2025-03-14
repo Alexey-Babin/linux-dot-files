@@ -51,9 +51,9 @@ source $ZSH/oh-my-zsh.sh
 
 # -----BEGIN fzf-tab-completion tuning (ansible managed) ----- 
 zstyle ':completion:*' fzf-search-display true
-zstyle ':completion:*' fzf-completion-opts --preview='eval $HOME/scripts/preview {1}'
+zstyle ':completion:*' fzf-completion-opts --preview='eval $HOME/scripts/preview {1}' --preview-window="hidden"
 zstyle ':completion::*:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' fzf-completion-opts --preview='eval eval echo "{1}"'
-zstyle ':completion::*:(ps|kill):*' fzf-completion-opts --preview='
+zstyle ':completion::*:(ps|kill|procs):*' fzf-completion-opts --preview='
   eval set -- {+1}
   { ps --forest -o pid=,cmd= -g "$(ps -o sid:1= -p "$@")" || pstree "$@" || echo "$@" } 2>/dev/null
 ' --preview-window='down,30%,border-horizontal,nohidden,nowrap' --multi

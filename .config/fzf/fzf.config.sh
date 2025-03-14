@@ -34,13 +34,13 @@ export FZF_DEFAULT_OPTS="
     --bind='tab:down'
     --bind='insert:toggle+down'
     --color='fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899' 
+    --preview-window=right:60%:hidden:wrap 
     -1"
 export FZF_COMPLETION_OPTS="
   --no-multi-line"
 
 export FZF_PREVIEW_OPTS=" \
-    --preview='$FZF_FILE_PREVIEW' \
-    --preview-window=right:60%:hidden:wrap "
+    --preview='$FZF_FILE_PREVIEW'"
 
 export FZF_DEFAULT_COMMAND="fdfind --type f $FD_OPTIONS \"$*\""
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -51,6 +51,10 @@ export FZF_CTRL_T_OPTS="\
     --bind='ctrl-f:change-prompt(Files∷ )+reload(fdfind . $FD_OPTIONS --type f )' \
 "
 export FZF_ALT_C_COMMAND="fdfind --type d $FD_OPTIONS $*"
+export FZF_ALT_C_OPTS="
+    $FZF_PREVIEW_OPTS
+    --preview-window=right:60%:nowrap:nohidden"
+
 
 export FZF_CTRL_R_OPTS=" \
     --preview='echo -E {}' --preview-window=up:3:hidden:wrap \
