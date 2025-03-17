@@ -36,6 +36,8 @@ instprog() {
 
 mkdir -p "$HOME/bin"
 mkdir -p "$HOME/programs"
+mkdir -p "$HOME/.local/bin"
+mkdir -p "$HOME/.config"
 
 if [ "$(whoami)" != "root" ]; then
   SUDO=sudo
@@ -126,6 +128,7 @@ info "RUST and crates"
 instprog cc "$SUDO nala install build-essential -y"
 info "Updating rustup (installing if needed)..."
 instprog "rustup" "sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) --quiet -y"
+PATH=$HOME/.cargo/bin:$HOME
 rustup update
 
 # Rust crates + common packages
@@ -140,7 +143,7 @@ info "Installing procs - Modern Process List"
 cargo install procs
 
 info "Installing zoxide - CD replacement"
-instprog zoxide "$SUDO nala install zoxide"
+instprog zoxide "$SUDO nala install zoxide -y"
 cargo install zoxide
 
 # Obvious Unified Compression Helper  https://github.com/ouch-org/ouch
@@ -231,7 +234,7 @@ instprog lf "$SUDO nala install lf -y"
 lf_target_dir="$HOME/programs/lf"
 mkdir -p "$lf_target_dir"
 mkdir -p "$HOME/.local/bin"
-wget https://github.com/gokcehan/lf/releases/latest/download/lf-linux-amd64.tar.gz -qO - \
+wget "https://github.com/gokcehan/lf/releases/latest/download/lf-linux-$(dpkg-architecture -q DEB_BUILD_ARCH).tar.gz" -qO - \
 	| tar -xzf - -C "$lf_target_dir"
 ln -s -f -T "$lf_target_dir/lf" "$HOME/.local/bin/lf"
 
