@@ -66,11 +66,10 @@ then
 fi
 
 # Sorce all files in .config/aliases.d
-aliased="${XDG_CONFIG_HOME:-$HOME/.config}/aliases.d"
-chopt -s nullglob dotglob
-if [ -d aliasesd ] ; then
-  for f in "$aliased"/*; do
+aliasesd="${XDG_CONFIG_HOME:-$HOME/.config}/aliases.d"
+if [ -d "$aliasesd" ] ; then
+  for f in "$aliasesd"/* ; do
     # shellcheck source=/dev/null
-    [ -f "$f" ] && . "$aliased/$f"
+    [ -f "$f" ] && . "$f"
   done
 fi
