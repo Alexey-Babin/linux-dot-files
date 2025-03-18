@@ -14,21 +14,11 @@ warning() {
 
 success() {
   tput setaf 2; printf "%s\n" "$@"; tput sgr0
+  printf "-----------------------------------\n"
 }
 
 code() {
   tput dim; printf "%s\n" "$@"; tput sgr0
-}
-
-instprog() {
-  package=$1
-  code=$2
-  if ! command -v "$package" > /dev/null 2>&1; then
-    info "Installing $package..."
-    eval "$code"
-  else
-    success "$package is already installed"
-  fi
 }
 
 #####################################################################
@@ -37,279 +27,26 @@ instprog() {
 mkdir -p "$HOME/bin"
 mkdir -p "$HOME/programs"
 mkdir -p "$HOME/.local/bin"
-mkdir -p "$HOME/.config"
 
-if [ "$(whoami)" != "root" ]; then
-  SUDO=sudo
-fi
+[ "$(whoami)" != "root" ] && SUDO=sudo
 
 info "Updating apt..."
 "$SUDO" apt update \
   && "$SUDO" apt upgrade -y\
-  && "$SUDO" apt dist-upgrade -y\
-  && "$SUDO" apt autoremove -y\
-  && "$SUDO" apt autoclean -y\
-  && "$SUDO" apt clean -y
+  && "$SUDO" apt dist-upgrade -y
 
-# PACKAGE INSTALLATION TOOLS
-# nala (https://gitlab.com/volian/nala)
-info "Installing nala"
-instprog nala "$SUDO apt install nala -y"
+"$HOME"/.config/yadm/bootstrap-packages
 
-info "Installing deborphan"
-instprog deborphan "$SUDO nala install deborphan -y"
+"$HOME"/.config/yadm/bootstrap-rust
 
-info "Installing lanugage pack"
-$SUDO apt-get install -y language-pack-ru
+"$HOME"/.config/yadm/bootstrap-zsh
 
-info "Installing curl"
-instprog curl "$SUDO nala install curl -y"
+"$HOME"/.config/yadm/bootstrap-local
 
-# SEARCH TOOLS
-# fd (fd-find) is a program to find entries in your filesystem (alternative to find)
-# https://github.com/sharkdp/fd
-instprog fdfind "$SUDO nala install fd-find -y"
-
-# rg (ripgrep) ripgrep is a line-oriented search tool that recursively searches 
-# the current directory for a regex pattern
-# https://github.com/BurntSushi/ripgrep
-info "Installing ripgrep"
-instprog rg "$SUDO nala install ripgrep -y"
-
-# fzf (Command Line Fuzzy Finder)
-# https://github.com/junegunn/fzf
-info "Installing fzf"
-instprog fzf "$SUDO nala install fzf -y"
-fzf_repo="$HOME/programs/fzf"
-if [ -d "$fzf_repo" ] ; then
-  cd "$fzf_repo" && \
-    git pull | grep -qv 'Already up to date.'  
-else
-  git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_repo"
-fi
-"$fzf_repo/install" --all --xdg
-
-info "Installing fzf-tab-completion"
-fzf_tc_repo="$HOME/programs/fzf-tab-completion"
-if [ -d "$fzf_tc_repo" ] ; then
-  cd "$fzf_tc_repo" && git pull | grep -qv 'Already up to date.'
-else
-  git clone "https://github.com/lincheney/fzf-tab-completion.git" "$fzf_tc_repo"
-fi
-ln -s -f -T "$fzf_tc_repo/readline/bin/rl_custom_complete" "$HOME/.local/bin/rl_custom_complete" -m 755
-
-# Shellcheck - tool for spell checking of bash scripts (a.e. in vim)
-# https://github.com/koalaman/shellcheck
-info "Installing shellcheck"
-instprog shellcheck "$SUDO nala install shellcheck -y"
-
-# Midnight commander
-info "Installing Midnight Commander"
-instprog mc "$SUDO nala install mc -y"
-
-# atool - archiving tool https://emunix.org/post/atool/
-info installing atool
-instprog atool "$SUDO nala install atool -y"
-
-# batcat https://github.com/sharkdp/bat
-info "Installing Bat(cat)"
-instprog batcat "$SUDO nala install bat -y"
-
-# pdf-to-text renderer (less will be abele to show .pdf file content)
-info "Installing pdf-to-text"
-instprog pdftotext "$SUDO nala install poppler-utils -y"
-
-# neofetch - beautiful systen information
-info "Installing Neofetch"
-instprog neofetch "$SUDO nala install neofetch -y"
-
-# RUST {{{
-info "RUST and crates"
-instprog cc "$SUDO nala install build-essential -y"
-info "Updating rustup (installing if needed)..."
-instprog "rustup" "sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) --quiet -y"
-PATH=$HOME/.cargo/bin:$HOME
-rustup update
-
-# Rust crates + common packages
-info "Installing lsd - color ls" 
-instprog lsd "$SUDO nala install lsd -y"
-cargo install lsd
-
-info "Installing dust - beautiful tree showing disk occupied"
-cargo install du-dust
-
-info "Installing procs - Modern Process List"
-cargo install procs
-
-info "Installing zoxide - CD replacement"
-instprog zoxide "$SUDO nala install zoxide -y"
-cargo install zoxide
-
-# Obvious Unified Compression Helper  https://github.com/ouch-org/ouch
-info "Installing ouch - Obvious Unified Compression Helper"
-cargo install ouch
-# RUST}}}
-
-
-# hipster things in shell :)
-info "ZSH"
-instprog zsh "$SUDO nala install zsh -y"
-
-if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-  info "Installing oh-my-zsh..."
-  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-else
-  success "oh-my-zsh is already installed"
-fi
-
-zsh_powerlevel10k=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-if [[ ! -d "$zsh_powerlevel10k" ]]; then
-  info "Installing powerlevel10k"
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$zsh_powerlevel10k"
-else
-  success "powerlevel10k is already installed"
-fi
-
-zsh_completions=${ZSH_CUSTOM:-${ZSH:-$HOME/.oh-my-zsh}/custom}/plugins/zsh-completions
-if [[ ! -d $zsh_completions ]]; then
-  info "Installing zsh-completions..."
-  git clone https://github.com/zsh-users/zsh-completions "$zsh_completions"
-else
-  success "zsh-completions is already installed"
-fi
-
-zsh_autosuggestions=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-if [[ ! -d $zsh_autosuggestions ]]; then
-  info "Installing zsh-autosuggestions..."
-  git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_autosuggestions"
-else
-  success "zsh-autosuggestions is already installed"
-fi
-
-zsh_syntax_highlighting=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-if [[ ! -d $zsh_syntax_highlighting ]]; then
-  info "Installing zsh-syntax-highlighting..."
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$zsh_syntax_highlighting"
-else
-  success "zsh-syntax-highlighting is already installed"
-fi
-
-zsh_fzf_tab=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab
-if [[ ! -d $zsh_fzf_tab ]]; then
-  info "Installing zsh-fzf-tab..."
-  git clone https://github.com/Aloxaf/fzf-tab "$zsh_fzf_tab"
-else
-  success "zsh-fzf-tab already installed"
-fi
-
-zsh_fzf_history_search=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search
-if [[ ! -d $zsh_fzf_history_search ]]; then
-  info "Installing zsh-fzf-history-search"
-  git clone https://github.com/joshskidmore/zsh-fzf-history-search \
-    "${ZSH_CUSTOM:=$HOME/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search"
-else
-  success "zsh-fzf-history-search already installed"
-fi
-
-# Lesspipe - less can read archives, directories, pdfs and images
-if ! command -v lesspipe > /dev/null 2>&1 ; then
-  info "Lesspipe - less can read archives, directories, pdfs and images"
-  "$SUDO" nala install exa pkg-config rar -y
-  git clone https://github.com/wofr06/lesspipe.git "$HOME/programs/lesspipe"
-  (cd "$HOME/programs/lesspipe" && "$SUDO" ./configure && "$SUDO" make install PREFIX=/usr/local)
-else
-  success "Lesspipe already installed"
-fi
-
-# chafa - image viewer for terminal
-info "chafa - image viewer for terminal"
-instprog chafa "$SUDO nala install chafa -y"
-
-# lf - light file manager {{{
-info "Installing lf - light file manager r31"
-instprog lf "$SUDO nala install lf -y"
-
-# Last version - to user`s bin
-lf_target_dir="$HOME/programs/lf"
-mkdir -p "$lf_target_dir"
-mkdir -p "$HOME/.local/bin"
-wget "https://github.com/gokcehan/lf/releases/latest/download/lf-linux-$(dpkg-architecture -q DEB_BUILD_ARCH).tar.gz" -qO - \
-	| tar -xzf - -C "$lf_target_dir"
-ln -s -f -T "$lf_target_dir/lf" "$HOME/.local/bin/lf"
-
-# cloning repo
-lf_repo="$HOME/programs/lf/repo"
-if [ -d "$lf_repo" ] ; then 
-	cd "$lf_repo" || return
-	git pull | grep -qv 'Already up to date.' && {
-		ln -s -f -T "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 755
-		ln -s -f -T "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 755
-	  }
-else 
-	git clone  https://github.com/gokcehan/lf.git "$lf_repo"
-	ln -s -f -T "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 755
-	ln -s -f -T "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 755
-fi
-
-# LF }}}
-
-info "Installing duf - color du"
-instprog duf "$SUDO nala install duf -y"
-
-info "Installing urlview"
-instprog urlview "$SUDO nala install urlview -y"
-
-# Tmux and features
-info "Installing tmux and options"
-instprog tmux "$SUDO nala install tmux -y"
-oh_my_tmux_dir="$HOME/programs/oh-my-tmux"
-if [[ ! -d "$oh_my_tmux_dir" ]] ; then
-  git clone https://github.com/gpakosz/.tmux.git "$oh_my_tmux_dir"
-  mkdir -p "$HOME/.config/tmux"
-  ln -s "$oh_my_tmux_dir/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
-else
-  success "oh-my-tmux is already installed"
-fi
-
-# pspg - PosgreSQL pager
-
-info "Installing pspg - PosgtreSQL pager"
-instprog pspg "$SUDO nala install pspg -y"
-
-# # Lynx - text browser
-# info "Installing lynx - text browser"
-# instprog lynx "$SUDO nala install lynx -y"
-
-info "Installing elinks - text browser"
-instprog elinks "$SUDO nala install elinks -y"
-
-# Cheat sheet https://github.com/chubin/cheat.sh
-if ! command -v cht.sh > /dev/null 2>&1 ; then 
-  info "Installing cheat.sh client"
-  curl https://cht.sh/:cht.sh > "$HOME/bin/cht.sh"
-  chmod +x "$HOME/.local/bin/cht.sh"
-fi
-
-# exiftool 
-info "Installing exiftool"
-instprog exiftool "$SUDO nala install exiftool -y"
-
-info "Installing jq"
-instprog jq "$SUDO nala install jq -y"
-
-# zoxide - replacement for cd
-if ! command -v zoxide > /dev/null 2>&1 ; then
-  curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-  eval "$(zoxide init bash)"
-  eval "$(zoxide init zsh)"
-fi
 
 # Finalizing - clean after all installation
-"$SUDO" nala autoremove -y
+"$SUDO" apt autoremove -y
 [[ -n "$(sudo deborphan --guess-common)" ]] && \
-  "$SUDO" deborphan --guess-common | xargs "$SUDO" nala purge -y
+  "$SUDO" deborphan --guess-common | xargs "$SUDO" apt purge -y
 
 "$SUDO" update-alternatives --set editor /usr/bin/vim.basic
-
-[[ -f .zshrc.pre-oh-my-zsh ]] && mv .zshrc.pre-oh-my-zsh .zshrc

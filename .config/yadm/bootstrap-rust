@@ -1,0 +1,22 @@
+#!/bin/bash
+
+[ "$(whoami)" != "root" ] && SUDO=sudo
+
+$SUDO apt install build-essential -y
+
+if command -v cargo >/dev/null 2>&1; then
+  info "Cargo already installed"
+else
+  info "Installing rust and cargo"
+  sh <(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs) --quiet -y
+  PATH=$HOME/.cargo/bin:$HOME
+fi
+
+if command -v rustup >/dev/null 2>&1; then
+  info Updating rust
+  rustup update
+fi
+
+info installing cargo packages
+cargo install cargo-update lsd du-dust procs ouch zoxide &&
+  success "Cargo packages are installed"
