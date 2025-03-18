@@ -4,9 +4,15 @@
 
 # Detect distro
 case $(cat /etc/*-release | grep ^ID= | cut -d= -f2) in
-ubuntu) bat=batcat ;;
+ubuntu)
+  bat=batcat
+  exiftool=exiftool
+  rar=rar
+  ;;
 debian)
   bat=bat
+  exiftool=libimage-exiftool-perl
+  rar=unrar
   # Add repositories that are non-free
   $SUDO awk '{print $1" "$2" main contrib non-free non-free-firmware"}' \
     /etc/apt/sources.list >/tmp/sources.list &&
@@ -14,16 +20,16 @@ debian)
   ;;
 esac
 
-
-$SUDO apt install -y curl wget man-db info git
+$SUDO apt install -y \
+  git curl info libssl-dev man-db pkg-config wget vim
 
 $SUDO apt install -y nala
 
 $SUDO nala install -y \
   atool "$bat" build-essential chafa curl deborphan duf \
-  elinks exa exiftool fd-find fzf jq \
+  elinks exa "$exiftool" fd-find fzf jq \
   lf lsd man-db mc nala neofetch \
-  pkg-config poppler-utils pspg rar ripgrep \
+  poppler-utils pspg "$rar" ripgrep \
   shellcheck tmux urlview zoxide
 
 if ! command -v lesspipe >/dev/null 2>&1; then

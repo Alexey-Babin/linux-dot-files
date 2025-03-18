@@ -35,8 +35,9 @@ else
 fi
 ln -sfT "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf"
 chmod 644 "$HOME/.oh-my-zsh/completions/_lf"
+mkdir -p "$HOME/.local/share/bash-completion"
 ln -sfT "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf"
-chmod 644 "$HOME/.local/share/bash-completion/completions/lf" -m 755
+chmod 644 "$HOME/.local/share/bash-completion/completions/lf"
 
 oh_my_tmux_dir="$HOME/programs/oh-my-tmux"
 if [[ -d "$oh_my_tmux_dir" ]]; then
