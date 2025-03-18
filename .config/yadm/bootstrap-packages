@@ -12,7 +12,7 @@ ubuntu)
 debian)
   bat=bat
   exiftool=libimage-exiftool-perl
-  rar=unrar
+  rar=unrar-free
   # Add repositories that are non-free
   $SUDO awk '{print $1" "$2" main contrib non-free non-free-firmware"}' \
     /etc/apt/sources.list >/tmp/sources.list &&
