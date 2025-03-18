@@ -1,23 +1,32 @@
 #!/bin/bash
-
+echo -e "------ \e[0;31mCreating directories\e[0m -------"
 mkdir -p "$HOME/bin"
 mkdir -p "$HOME/programs"
 mkdir -p "$HOME/.local/bin"
 
 [ "$(whoami)" != "root" ] && SUDO=sudo
 
+echo -e "\n\n------ \e[0;31mUpdating apt\e[0m -------"
 "$SUDO" apt update \
   && "$SUDO" apt upgrade -y \
-  && "$SUDO" apt dist-upgrade -y
+  && "$SUDO" apt dist-upgrade -y \
+  && echo -e "------ \e[0;36mUpdate apt - done\e[0m -------"
 
+echo -e "\n\n------ \e[0;31mInstall soft from packages\e[0m -------"
 source "$HOME"/.config/yadm/bootstrap-packages
+echo -e "------ \e[0;36mInstall from packages - done\e[0m -------"
 
+echo -e "\n\n------ \e[0;31mInstall rust and cargo\e[0m -------"
 source "$HOME"/.config/yadm/bootstrap-rust
+echo -e "------ \e[0;36mInstall rust and cargo - done\e[0m -------"
 
+echo -e "\n\n------ \e[0;31mInstall zsh\e[0m -------"
 source "$HOME"/.config/yadm/bootstrap-zsh
+echo -e "------ \e[0;36mInstall zsh - done\e[0m -------"
 
+echo -e "\n\n------ \e[0;31mInstall local\e[0m -------"
 source "$HOME"/.config/yadm/bootstrap-local
-
+echo -e "------ \e[0;36mInstall local - done\e[0m -------"
 
 # Finalizing - clean after all installation
 "$SUDO" apt autoremove -y
