@@ -1,75 +1,52 @@
 #!/bin/bash
 
-info "ZSH"
 "$SUDO" apt install zsh git -y
 
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-  info "Installing oh-my-zsh..."
-  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keepzshrc &&
-    success "oh-my-zsh installed"
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keepzshrc
 else
-  info "Updating oh-my-zsh"
-  cd "$HOME/.oh-my-zsh" && git pull &&
-    success "oh-my-zsh up to date"
+  cd "$HOME/.oh-my-zsh" && git pull
 fi
 
 zsh_powerlevel10k=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 if [[ ! -d "$zsh_powerlevel10k" ]]; then
-  info "Installing powerlevel10k"
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$zsh_powerlevel10k" &&
-    success "powerlevel10k installed"
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$zsh_powerlevel10k"
 else
-  cd "$zsh_powerlevel10k" && git pull &&
-    success "powerlevel10k is up to date"
+  cd "$zsh_powerlevel10k" && git pull
 fi
 
 zsh_completions=${ZSH_CUSTOM:-${ZSH:-$HOME/.oh-my-zsh}/custom}/plugins/zsh-completions
 if [[ ! -d $zsh_completions ]]; then
-  info "Installing zsh-completions..."
-  git clone https://github.com/zsh-users/zsh-completions "$zsh_completions" &&
-    success "zsh-completions is installed"
+  git clone https://github.com/zsh-users/zsh-completions "$zsh_completions"
 else
-  cd "$zsh_completions" && git pull &&
-    success "zsh-completions is up to date"
+  cd "$zsh_completions" && git pull
 fi
 
 zsh_autosuggestions=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 if [[ ! -d $zsh_autosuggestions ]]; then
-  info "Installing zsh-autosuggestions..."
-  git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_autosuggestions" &&
-    success "zsh-autosuggestions is installed"
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$zsh_autosuggestions"
 else
-  cd "$zsh_autosuggestions" && git pull &&
-    success "zsh-autosuggestions is up to date"
+  cd "$zsh_autosuggestions" && git pull
 fi
 
 zsh_syntax_highlighting=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 if [[ ! -d $zsh_syntax_highlighting ]]; then
-  info "Installing zsh-syntax-highlighting..."
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$zsh_syntax_highlighting" &&
-    success "zsh-syntax-highlighting is installed"
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$zsh_syntax_highlighting"
 else
-  cd "$zsh_syntax_highlighting" && git pull &&
-    success "zsh-syntax-highlighting is up to date"
+  cd "$zsh_syntax_highlighting" && git pull
 fi
 
 zsh_fzf_tab=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab
 if [[ ! -d $zsh_fzf_tab ]]; then
-  info "Installing zsh-fzf-tab..."
-  git clone https://github.com/Aloxaf/fzf-tab "$zsh_fzf_tab" &&
-    success "zsh-fzf-tab installed"
+  git clone https://github.com/Aloxaf/fzf-tab "$zsh_fzf_tab"
 else
-  cd "$zsh_fzf_tab" && git pull &&
-    success "zsh-fzf-tab up to date"
+  cd "$zsh_fzf_tab" && git pull
 fi
 
 zsh_fzf_history_search=${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search
 if [[ ! -d $zsh_fzf_history_search ]]; then
-  info "Installing zsh-fzf-history-search"
   git clone https://github.com/joshskidmore/zsh-fzf-history-search \
-    "${ZSH_CUSTOM:=$HOME/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search" &&
-    success "zsh-fzf-history-search installed"
+    "${ZSH_CUSTOM:=$HOME/.oh-my-zsh/custom}/plugins/zsh-fzf-history-search"
 else
-  cd "$zsh_fzf_history_search" && git pull &&
-    success "zsh-fzf-history-search already installed"
+  cd "$zsh_fzf_history_search" && git pull
 fi

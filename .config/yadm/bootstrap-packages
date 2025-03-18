@@ -2,56 +2,32 @@
 
 [ "$(whoami)" != "root" ] && SUDO=sudo
 
+# Detect distro
+case $(cat /etc/*-release | grep ^ID= | cut -d= -f2) in
+ubuntu) bat=batcat ;;
+debian)
+  bat=bat
+  # Add repositories that are non-free
+  $SUDO awk '{print $1" "$2" main contrib non-free non-free-firmware"}' \
+    /etc/apt/sources.list >/tmp/sources.list &&
+    mv /tmp/sources.list sources.list
+  ;;
+esac
+
+
+$SUDO apt install -y curl wget man-db info git
+
 $SUDO apt install -y nala
 
-info Installing software from packages...
-if $SUDO nala install -y \
-  atool batcat build-essential chafa curl deborphan duf \
+$SUDO nala install -y \
+  atool "$bat" build-essential chafa curl deborphan duf \
   elinks exa exiftool fd-find fzf jq \
   lf lsd man-db mc nala neofetch \
   pkg-config poppler-utils pspg rar ripgrep \
-  shellcheck tmux urlview zoxide; then
-  success "Installation from packages done"
-else
-  warning "Something was wrong with installation from packages"
-fi
+  shellcheck tmux urlview zoxide
 
 if ! command -v lesspipe >/dev/null 2>&1; then
-  info "Lesspipe - less can read archives, directories, pdfs and images"
-  "$SUDO" nala install exa pkg-config rar -y
-
+  "$SUDO" apt install exa pkg-config rar -y
   git clone https://github.com/wofr06/lesspipe.git "$HOME/programs/lesspipe"
   (cd "$HOME/programs/lesspipe" && "$SUDO" ./configure && "$SUDO" make install PREFIX=/usr/local)
-else
-  success "Lesspipe already installed"
 fi
-
-# # Lynx - text browser
-# info "Installing lynx - text browser"
-# instprog lynx "$SUDO nala install lynx -y"
-
-# Cheat sheet https://github.com/chubin/cheat.sh
-
-# exiftool
-info "Installing exiftool"
-instprog exiftool "$SUDO nala install exiftool -y"
-
-info "Installing jq"
-instprog jq "$SUDO nala install jq -y"
-
-# zoxide - replacement for cd
-if ! command -v zoxide >/dev/null 2>&1; then
-  curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
-  eval "$(zoxide init bash)"
-  eval "$(zoxide init zsh)"
-fi
-
-# Finalizing - clean after all installation
-"$SUDO" nala autoremove -y
-
-[[ -n "$(sudo deborphan --guess-common)" ]] &&
-  "$SUDO" deborphan --guess-common | xargs "$SUDO" nala purge -y
-
-"$SUDO" update-alternatives --set editor /usr/bin/vim.basic
-
-[[ -f .zshrc.pre-oh-my-zsh ]] && mv .zshrc.pre-oh-my-zsh .zshrc

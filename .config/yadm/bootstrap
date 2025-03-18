@@ -1,47 +1,22 @@
 #!/bin/bash
 
-#####################################################################
-# FUNCTIONS
-#
-info() {
-  tput setaf 4; printf "%s\n" "$@"; tput sgr0
-}
-
-warning() {
-  tput setaf 3 bold; printf "%s\n" "$@"; tput sgr0
-  sleep 0.5
-}
-
-success() {
-  tput setaf 2; printf "%s\n" "$@"; tput sgr0
-  printf "-----------------------------------\n"
-}
-
-code() {
-  tput dim; printf "%s\n" "$@"; tput sgr0
-}
-
-#####################################################################
-# MAIN
-
 mkdir -p "$HOME/bin"
 mkdir -p "$HOME/programs"
 mkdir -p "$HOME/.local/bin"
 
 [ "$(whoami)" != "root" ] && SUDO=sudo
 
-info "Updating apt..."
 "$SUDO" apt update \
-  && "$SUDO" apt upgrade -y\
+  && "$SUDO" apt upgrade -y \
   && "$SUDO" apt dist-upgrade -y
 
-"$HOME"/.config/yadm/bootstrap-packages
+source "$HOME"/.config/yadm/bootstrap-packages
 
-"$HOME"/.config/yadm/bootstrap-rust
+source "$HOME"/.config/yadm/bootstrap-rust
 
-"$HOME"/.config/yadm/bootstrap-zsh
+source "$HOME"/.config/yadm/bootstrap-zsh
 
-"$HOME"/.config/yadm/bootstrap-local
+source "$HOME"/.config/yadm/bootstrap-local
 
 
 # Finalizing - clean after all installation

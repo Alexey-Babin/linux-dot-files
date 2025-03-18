@@ -8,7 +8,8 @@ else
   git clone --depth 1 https://github.com/junegunn/fzf.git "$fzf_repo"
 fi
 "$fzf_repo/install" --all --xdg
-ln -sfT "$fzf_repo"/bin/fzf "$HOME"/.local/bin/fzf -m 755
+ln -sfT "$fzf_repo"/bin/fzf "$HOME"/.local/bin/fzf 
+chmod 755 "$HOME"/.local/bin/fzf
 
 fzf_tc_repo="$HOME/programs/fzf-tab-completion"
 if [ -d "$fzf_tc_repo" ]; then
@@ -16,12 +17,14 @@ if [ -d "$fzf_tc_repo" ]; then
 else
   git clone "https://github.com/lincheney/fzf-tab-completion.git" "$fzf_tc_repo"
 fi
-ln -sfT "$fzf_tc_repo/readline/bin/rl_custom_complete" "$HOME/.local/bin/rl_custom_complete" -m 755
+ln -sfT "$fzf_tc_repo/readline/bin/rl_custom_complete" "$HOME/.local/bin/rl_custom_complete"
+chmod 755 "$HOME/.local/bin/rl_custom_complete"
 
 lf_target_dir="$HOME/programs/lf"
 wget "https://github.com/gokcehan/lf/releases/latest/download/lf-linux-$(dpkg-architecture -q DEB_BUILD_ARCH).tar.gz" -qO - |
   tar -xzf - -C "$lf_target_dir"
 ln -sfT "$lf_target_dir/lf" "$HOME/.local/bin/lf"
+chmod 755 "$HOME/.local/bin/lf"
 
 lf_repo="$HOME/programs/lf/repo"
 if [ -d "$lf_repo" ]; then
@@ -30,8 +33,10 @@ if [ -d "$lf_repo" ]; then
 else
   git clone https://github.com/gokcehan/lf.git "$lf_repo"
 fi
-ln -sfT "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf" -m 755
-ln -sfT "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf" -m 755
+ln -sfT "$lf_repo/etc/lf.zsh" "$HOME/.oh-my-zsh/completions/_lf"
+chmod 644 "$HOME/.oh-my-zsh/completions/_lf"
+ln -sfT "$lf_repo/etc/lf.bash" "$HOME/.local/share/bash-completion/completions/lf"
+chmod 644 "$HOME/.local/share/bash-completion/completions/lf" -m 755
 
 oh_my_tmux_dir="$HOME/programs/oh-my-tmux"
 if [[ -d "$oh_my_tmux_dir" ]]; then
@@ -41,6 +46,7 @@ else
   mkdir -p "$HOME/.config/tmux"
 fi
 ln -sfT "$oh_my_tmux_dir/.tmux.conf" "$HOME/.config/tmux/tmux.conf"
+chmod 644 "$HOME/.config/tmux/tmux.conf"
 
 if ! command -v cht.sh >/dev/null 2>&1; then
   info "Installing cheat.sh client"
