@@ -5,12 +5,10 @@
 # Detect distro
 case $(cat /etc/*-release | grep ^ID= | cut -d= -f2) in
 ubuntu)
-  bat=batcat
   exiftool=exiftool
   rar=rar
   ;;
 debian)
-  bat=bat
   exiftool=libimage-exiftool-perl
   rar=unrar-free
   # Add repositories that are non-free
@@ -26,10 +24,10 @@ $SUDO apt install -y \
 $SUDO apt install -y nala
 
 $SUDO nala install -y \
-  atool "$bat" build-essential chafa curl deborphan duf \
-  elinks exa "$exiftool" fd-find fzf jq \
+  atool bat build-essential chafa curl deborphan duf \
+  elinks eza "$exiftool" fd-find fzf htop jq \
   lf lsd man-db mc nala neofetch \
-  poppler-utils pspg "$rar" ripgrep \
+  pinfo poppler-utils pspg "$rar" ripgrep \
   shellcheck tmux urlview zoxide
 
 if ! command -v lesspipe >/dev/null 2>&1; then
