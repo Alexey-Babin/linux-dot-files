@@ -2,7 +2,12 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+
+if [[ "$TERM" =~ ^linux ]] ; then
+    ZSH_THEME="clean"
+else
+    ZSH_THEME="powerlevel10k/powerlevel10k"
+fi
 
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="false"
@@ -40,6 +45,10 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# run0 should start with bash shell, not zsh
+command -v run0 >/dev/null 2>&1 && alias run0='run0 --setenv=SHELL=/usr/bin/bash'
+
+
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/common-profile" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/common-profile"
 
 [ -f "$HOME/programs/lf/etc/lfcd.sh" ] && source "$HOME/programs/lf/etc/lfcd.sh"
@@ -70,5 +79,6 @@ command -v procs > /dev/null 2>&1 && source <(procs --gen-completion-out zsh)
 command -v zoxide > /dev/null 2>&1 && eval "$(zoxide init zsh)"
 
 # To customize prompt, run `p10k configure` or edit ~/.config/.p10k.zsh.
-[[ ! -f ~/.config/.p10k.zsh ]] || source ~/.config/.p10k.zsh
+[[ ! -f ~/.config/.p10k.zsh && ZSH_THEME == "powerlevel10k/powerlevel10k" ]] || source ~/.config/.p10k.zsh
+
 
