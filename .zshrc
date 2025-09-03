@@ -81,4 +81,4 @@ command -v zoxide > /dev/null 2>&1 && eval "$(zoxide init zsh)"
 # To customize prompt, run `p10k configure` or edit ~/.config/.p10k.zsh.
 [[ ! -f ~/.config/.p10k.zsh && ZSH_THEME == "powerlevel10k/powerlevel10k" ]] || source ~/.config/.p10k.zsh
 
-
+[[ -f "/etc/grc.zsh" ]] && source /etc/grc.zsh
