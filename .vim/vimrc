@@ -426,7 +426,7 @@ function! SetTerminalTitle()
   if len(titleString) > 0
     let &titlestring = expand('%:t')
     " this is the format terminal expects when setting the window title
-    let args = "\033];vim: ".&titlestring."\007"
+    let args = "\033];${SSH_CONNECTION:+$(hostname)📡}vim: ".&titlestring."\007"
     let cmd = 'silent !echo -e"'.args.'"'
     execute cmd
     redraw!
